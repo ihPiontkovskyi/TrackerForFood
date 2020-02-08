@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import ua.foodtracker.domain.Record;
 import ua.foodtracker.repository.RecordRepository;
 import ua.foodtracker.service.RecordService;
-import ua.foodtracker.utility.Mapper;
+import ua.foodtracker.service.utility.Mapper;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static ua.foodtracker.service.utility.ServiceUtility.findByStringParam;
-import static ua.foodtracker.utility.Mapper.mapRecordDomainToRecordEntity;
+import static ua.foodtracker.service.utility.Mapper.mapRecordDomainToRecordEntity;
 
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))

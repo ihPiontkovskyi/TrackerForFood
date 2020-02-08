@@ -16,35 +16,38 @@ public class User {
 
     private Integer id;
 
-    @Email
+    @Email(message = "user.incorrect.email.exception.message")
     private String email;
 
-    @Pattern(regexp = "^[a-zA-Z0-9]{4,32}$")
+    @Pattern(regexp = "^[a-zA-Z0-9]{4,32}$", message = "user.password.exception.message")
     private String password;
 
-    @Pattern(regexp = "^[a-zA-zа-яА-Я]{3,32}$")
+    @Pattern(regexp = "^[a-zA-zа-яА-Я]{3,32}$", message = "user.first.name.exception.message")
     private String firstName;
 
-    @Pattern(regexp = "^[a-zA-zа-яА-Я]{3,32}$")
+    @Pattern(regexp = "^[a-zA-zа-яА-Я]{3,32}$", message = "user.last.name.exception.message")
     private String lastName;
 
-    @Positive
+    @Positive(message = "user.weight.not.positive.exception.message")
+    @NotNull(message = "user.weight.null.exception.message")
     private Integer weight;
 
-    @Positive
+    @Positive(message = "user.height.not.positive.exception.message")
+    @NotNull(message = "user.height.null.exception.message")
     private Integer height;
 
-    @NotNull
+    @NotNull(message = "user.lifestyle.null.exception.message")
     private Lifestyle lifestyle;
 
-    @PastOrPresent
+    @PastOrPresent(message = "user.birthday.should.be.past.or.present")
+    @NotNull(message = "user.birthday.null.exception.message")
     private LocalDate birthday;
 
-    @NotNull
+    @NotNull(message = "user.gender.null.exception.message")
     private Gender gender;
 
     private UserGoal userGoal;
 
-    @NotNull
+    @NotNull(message = "user.role.null.exception.message")
     private Role role;
 }

@@ -8,14 +8,14 @@ import ua.foodtracker.entity.UserEntity;
 import ua.foodtracker.repository.UserRepository;
 import ua.foodtracker.service.UserService;
 import ua.foodtracker.service.exception.IncorrectDataException;
-import ua.foodtracker.utility.Mapper;
+import ua.foodtracker.service.utility.Mapper;
 
 import java.util.Optional;
 
 import static org.springframework.security.crypto.bcrypt.BCrypt.checkpw;
 import static ua.foodtracker.service.utility.ServiceUtility.findByStringParam;
-import static ua.foodtracker.utility.Mapper.mapUserDomainToUserEntity;
-import static ua.foodtracker.utility.Mapper.mapUserEntityToUserDomain;
+import static ua.foodtracker.service.utility.Mapper.mapUserDomainToUserEntity;
+import static ua.foodtracker.service.utility.Mapper.mapUserEntityToUserDomain;
 
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))

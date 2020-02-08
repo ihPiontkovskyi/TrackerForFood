@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 import ua.foodtracker.domain.Meal;
 import ua.foodtracker.repository.MealRepository;
 import ua.foodtracker.service.MealService;
-import ua.foodtracker.utility.Mapper;
+import ua.foodtracker.service.utility.Mapper;
 
 import java.util.Optional;
 
 import static ua.foodtracker.service.utility.ServiceUtility.findByStringParam;
 import static ua.foodtracker.service.utility.ServiceUtility.getNumberOfPage;
-import static ua.foodtracker.utility.Mapper.mapMealDomainToMealEntity;
+import static ua.foodtracker.service.utility.Mapper.mapMealDomainToMealEntity;
 
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))

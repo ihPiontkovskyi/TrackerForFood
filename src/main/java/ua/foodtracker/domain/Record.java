@@ -13,12 +13,13 @@ public class Record {
 
     private Integer id;
 
-    @NotNull
+    @NotNull(message = "meal.in.record.should.be.not.null")
     private Meal meal;
 
-    @PastOrPresent
+    @PastOrPresent(message = "record.date.should.be.past.or.present")
+    @NotNull(message = "date.in.record.should.be.not.null")
     private LocalDate date;
 
-    @NotNull
+    @NotNull(message = "user.in.record.should.be.not.null")
     private User user;
 }

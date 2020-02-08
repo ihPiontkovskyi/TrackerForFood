@@ -1,4 +1,4 @@
-package ua.foodtracker.utility;
+package ua.foodtracker.service.utility;
 
 import ua.foodtracker.domain.Gender;
 import ua.foodtracker.domain.Lifestyle;
