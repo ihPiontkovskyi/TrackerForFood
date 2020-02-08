@@ -1,12 +1,12 @@
 package ua.foodtracker.service;
 
+import org.springframework.data.domain.Page;
 import ua.foodtracker.domain.Meal;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface MealService {
-    List<Meal> findAllByPage(String pageNumber);
+    Page<Meal> findAllByPage(String pageNumber);
 
     long pageCount();
 
