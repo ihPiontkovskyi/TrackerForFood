@@ -1,117 +1,44 @@
 package ua.foodtracker.entity;
 
+import lombok.Data;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Data
+@Table(name = "meals")
 public class MealEntity {
-    private final Integer id;
-    private final String name;
-    private final Integer protein;
-    private final UserEntity userEntity;
-    private final Integer carbohydrate;
-    private final Integer fat;
-    private final Integer weight;
-    private final Integer water;
+    @Id
+    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
 
-    public MealEntity(Builder builder) {
-        this.id = builder.id;
-        this.name = builder.name;
-        this.protein = builder.protein;
-        this.userEntity = builder.userEntity;
-        this.carbohydrate = builder.carbohydrates;
-        this.fat = builder.fat;
-        this.weight = builder.weight;
-        this.water = builder.water;
-    }
+    @Column(name = "name", nullable = false)
+    private String name;
 
-    public Integer getId() {
-        return id;
-    }
+    @Column(name = "protein", nullable = false)
+    private Integer protein;
 
-    public String getName() {
-        return name;
-    }
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 
-    public Integer getProtein() {
-        return protein;
-    }
+    @Column(name = "carbohydrate", nullable = false)
+    private Integer carbohydrate;
 
-    public UserEntity getUserEntity() {
-        return userEntity;
-    }
+    @Column(name = "fat", nullable = false)
+    private Integer fat;
 
-    public Integer getCarbohydrate() {
-        return carbohydrate;
-    }
+    @Column(name = "weight", nullable = false)
+    private Integer weight;
 
-    public Integer getFat() {
-        return fat;
-    }
-
-    public Integer getWeight() {
-        return weight;
-    }
-
-    public Integer getWater() {
-        return water;
-    }
-
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    public static class Builder {
-        private Integer id;
-        private String name;
-        private Integer protein;
-        private UserEntity userEntity;
-        private Integer carbohydrates;
-        private Integer fat;
-        private Integer weight;
-        private Integer water;
-
-        private Builder() {
-        }
-
-        public Builder withId(Integer id) {
-            this.id = id;
-            return this;
-        }
-
-        public Builder withName(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public Builder withProtein(Integer protein) {
-            this.protein = protein;
-            return this;
-        }
-
-        public Builder withUser(UserEntity userEntity) {
-            this.userEntity = userEntity;
-            return this;
-        }
-
-        public Builder withCarbohydrates(Integer carbohydrates) {
-            this.carbohydrates = carbohydrates;
-            return this;
-        }
-
-        public Builder withFat(Integer fat) {
-            this.fat = fat;
-            return this;
-        }
-
-        public Builder withWeight(Integer weight) {
-            this.weight = weight;
-            return this;
-        }
-
-        public Builder withWater(Integer water) {
-            this.water = water;
-            return this;
-        }
-
-        public MealEntity build() {
-            return new MealEntity(this);
-        }
-    }
+    @Column(name = "water", nullable = false)
+    private Integer water;
 }

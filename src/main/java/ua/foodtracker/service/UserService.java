@@ -1,10 +1,7 @@
 package ua.foodtracker.service;
 
-import ua.foodtracker.annotation.Transactional;
-import ua.foodtracker.service.domain.User;
-
-import java.util.Locale;
-import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
+import ua.foodtracker.domain.User;
 
 public interface UserService {
     User login(String email, String pass);
@@ -15,9 +12,7 @@ public interface UserService {
     @Transactional
     void modify(User user);
 
-    Optional<User> findById(String id);
+    Object findById(String id);
 
-    void delete(String id);
-
-    void setLocale(Locale locale);
+    void delete(User user);
 }

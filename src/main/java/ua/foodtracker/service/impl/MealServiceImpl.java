@@ -1,75 +1,55 @@
 package ua.foodtracker.service.impl;
 
-import ua.foodtracker.annotation.Autowired;
-import ua.foodtracker.annotation.Service;
-import ua.foodtracker.dao.MealDao;
-import ua.foodtracker.dao.Page;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import ua.foodtracker.domain.Meal;
+import ua.foodtracker.entity.MealEntity;
+import ua.foodtracker.repository.MealRepository;
 import ua.foodtracker.service.MealService;
-import ua.foodtracker.service.domain.Meal;
-import ua.foodtracker.service.utility.EntityMapper;
-import ua.foodtracker.validator.impl.MealValidator;
+import ua.foodtracker.utility.Mapper;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import static ua.foodtracker.service.utility.EntityMapper.mapMealToEntityMeal;
-import static ua.foodtracker.service.utility.ServiceUtility.addByType;
-import static ua.foodtracker.service.utility.ServiceUtility.deleteByStringId;
 import static ua.foodtracker.service.utility.ServiceUtility.findByStringParam;
 import static ua.foodtracker.service.utility.ServiceUtility.getNumberOfPage;
-import static ua.foodtracker.service.utility.ServiceUtility.modifyByType;
+import static ua.foodtracker.utility.Mapper.mapMealDomainToMealEntity;
 
 @Service
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class MealServiceImpl implements MealService {
-    private static final Long ITEMS_PER_PAGE = 3L;
+    private static final long ITEMS_PER_PAGE = 3L;
+    private final MealRepository mealRepository;
 
-    @Autowired
-    private MealDao mealDao;
-
-    @Autowired
-    private MealValidator mealValidator;
 
     @Override
     public List<Meal> findAllByPage(String pageNumber) {
-        return findByStringParam(pageNumber, mealValidator, number -> {
-            if (number < 1 || number > pageCount()) {
-                number = 1;
-            }
-            return mealDao.findAll(new Page(number, ITEMS_PER_PAGE)).stream()
-                    .map(EntityMapper::mapEntityMealToMeal)
-                    .collect(Collectors.toList());
-        });
+        return null;
     }
 
     @Override
     public long pageCount() {
-        return getNumberOfPage(mealDao.count(), ITEMS_PER_PAGE);
+        return getNumberOfPage(mealRepository.count(), ITEMS_PER_PAGE);
     }
 
     @Override
     public void add(Meal meal) {
-        addByType(meal, mealValidator, obj -> mealDao.save(mapMealToEntityMeal(obj)));
+        mealRepository.save(mapMealDomainToMealEntity(meal));
     }
 
     @Override
-    public void delete(String id) {
-        deleteByStringId(id, mealValidator, intId -> mealDao.deleteById(intId));
+    public void delete(Meal meal) {
+        mealRepository.delete(mapMealDomainToMealEntity(meal));
     }
 
     @Override
     public void modify(Meal meal) {
-        modifyByType(meal, mealValidator, obj -> mealDao.update(mapMealToEntityMeal(obj)));
+        mealRepository.save(mapMealDomainToMealEntity(meal));
     }
 
     @Override
     public Optional<Meal> findById(String id) {
-        return findByStringParam(id, mealValidator, intId -> mealDao.findById(intId).map(EntityMapper::mapEntityMealToMeal));
-    }
-
-    @Override
-    public void setLocale(Locale locale) {
-        mealValidator.setLocale(locale);
+        return findByStringParam(id, mealRepository::findById).map(Mapper::mapMealEntityToMealDomain);
     }
 }

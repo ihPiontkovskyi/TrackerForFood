@@ -1,15 +1,12 @@
 package ua.foodtracker.entity;
 
-/**
- * Enum which contain user role
- */
-public enum Role {
+public enum RoleEntity {
     USER,
     ADMIN;
 
     public static final String ERROR_MESSAGE = "There is no such role!";
 
-    public static Role getGenderById(Integer id) {
+    public static RoleEntity getGenderById(Integer id) {
         if (id == 2) {
             return ADMIN;
         }

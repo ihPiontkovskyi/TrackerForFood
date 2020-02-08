@@ -1,70 +1,63 @@
 package ua.foodtracker.service.impl;
 
-import ua.foodtracker.annotation.Autowired;
-import ua.foodtracker.annotation.Service;
-import ua.foodtracker.dao.RecordDao;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import ua.foodtracker.domain.Record;
+import ua.foodtracker.repository.RecordRepository;
 import ua.foodtracker.service.RecordService;
-import ua.foodtracker.service.domain.Record;
-import ua.foodtracker.service.utility.EntityMapper;
-import ua.foodtracker.validator.impl.RecordValidator;
+import ua.foodtracker.utility.Mapper;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static ua.foodtracker.service.utility.EntityMapper.mapRecordToEntityRecord;
-import static ua.foodtracker.service.utility.ServiceUtility.addByType;
-import static ua.foodtracker.service.utility.ServiceUtility.deleteByStringId;
 import static ua.foodtracker.service.utility.ServiceUtility.findByStringParam;
-import static ua.foodtracker.service.utility.ServiceUtility.modifyByType;
+import static ua.foodtracker.utility.Mapper.mapRecordDomainToRecordEntity;
 
 @Service
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class RecordServiceImpl implements RecordService {
 
-    @Autowired
-    private RecordDao recordDao;
-
-    @Autowired
-    private RecordValidator recordValidator;
+    private final RecordRepository recordRepository;
 
     @Override
     public List<Record> getRecordsByDate(int userId, String date) {
-        LocalDate dateCurrent;
-        try {
-            dateCurrent = LocalDate.parse(date);
-        } catch (DateTimeParseException ex) {
-            //
-            dateCurrent = LocalDate.now();
+        if (date == null) {
+            return Collections.emptyList();
         }
-        return recordDao.findByUserIdAndDate(userId, dateCurrent).stream().map(EntityMapper::mapEntityRecordToRecord).collect(Collectors.toList());
+        try {
+            return recordRepository.findAllByUserIdAndDate(userId, LocalDate.parse(date)).stream()
+                    .map(Mapper::mapRecordEntityToRecordDomain)
+                    .collect(Collectors.toList());
+        } catch (DateTimeParseException ex) {
+
+            return recordRepository.findAllByUserIdAndDate(userId, LocalDate.now()).stream()
+                    .map(Mapper::mapRecordEntityToRecordDomain)
+                    .collect(Collectors.toList());
+        }
     }
 
     @Override
     public void add(Record record) {
-        addByType(record, recordValidator, obj -> recordDao.save(mapRecordToEntityRecord(obj)));
+        recordRepository.save(mapRecordDomainToRecordEntity(record));
     }
 
     @Override
-    public void delete(String id) {
-        deleteByStringId(id, recordValidator, intId -> recordDao.deleteById(intId));
+    public void delete(Record record) {
+        recordRepository.delete(mapRecordDomainToRecordEntity(record));
     }
 
     @Override
     public void modify(Record record) {
-        modifyByType(record, recordValidator, obj -> recordDao.update(mapRecordToEntityRecord(obj)));
+        recordRepository.save(mapRecordDomainToRecordEntity(record));
     }
 
     @Override
     public Optional<Record> findById(String id) {
-        return findByStringParam(id, recordValidator, intId -> recordDao.findById(intId).map(EntityMapper::mapEntityRecordToRecord));
-    }
-
-    @Override
-    public void setLocale(Locale locale) {
-        recordValidator.setLocale(locale);
+        return findByStringParam(id, recordRepository::findById).map(Mapper::mapRecordEntityToRecordDomain);
     }
 }

@@ -1,4 +1,6 @@
 package ua.foodtracker.domain;
 
-public class Role {
+public enum Role {
+    USER,
+    ADMIN;
 }

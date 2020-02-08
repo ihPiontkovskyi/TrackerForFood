@@ -1,73 +1,59 @@
 package ua.foodtracker.service.impl;
 
-import ua.foodtracker.annotation.Autowired;
-import ua.foodtracker.annotation.Service;
-import ua.foodtracker.dao.UserDao;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import ua.foodtracker.domain.User;
 import ua.foodtracker.entity.UserEntity;
-import ua.foodtracker.exception.IncorrectDataException;
+import ua.foodtracker.repository.UserRepository;
 import ua.foodtracker.service.UserService;
-import ua.foodtracker.service.domain.User;
-import ua.foodtracker.service.utility.EntityMapper;
-import ua.foodtracker.validator.impl.UserValidator;
+import ua.foodtracker.service.exception.IncorrectDataException;
+import ua.foodtracker.utility.Mapper;
 
-import java.util.Locale;
 import java.util.Optional;
 
-import static org.mindrot.jbcrypt.BCrypt.checkpw;
-import static ua.foodtracker.service.utility.EntityMapper.mapUserEntityToUser;
-import static ua.foodtracker.service.utility.EntityMapper.mapUserToEntityUser;
-import static ua.foodtracker.service.utility.ServiceUtility.addByType;
-import static ua.foodtracker.service.utility.ServiceUtility.deleteByStringId;
+import static org.springframework.security.crypto.bcrypt.BCrypt.checkpw;
 import static ua.foodtracker.service.utility.ServiceUtility.findByStringParam;
-import static ua.foodtracker.service.utility.ServiceUtility.modifyByType;
+import static ua.foodtracker.utility.Mapper.mapUserDomainToUserEntity;
+import static ua.foodtracker.utility.Mapper.mapUserEntityToUserDomain;
 
 @Service
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserDao userDao;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private UserValidator userValidator;
 
     @Override
     public User login(String email, String pass) {
-        Optional<UserEntity> userByEmail = userDao.findByEmail(email);
-        if (userByEmail.isPresent() && checkpw(pass, userByEmail.get().getPassword())) {
-            return mapUserEntityToUser(userByEmail.get());
-        } else {
-            userValidator.putIssue("user", "login.incorrect.data");
-            throw new IncorrectDataException(userValidator.getErrorMessageByIssues());
+        Optional<UserEntity> userEntity = userRepository.findByEmail(email);
+        if (userEntity.isPresent() && checkpw(userEntity.get().getPassword(), pass)) {
+            return mapUserEntityToUserDomain(userEntity.get());
         }
+        throw new IncorrectDataException("incorrect.email.or.password");
     }
 
     @Override
     public void register(User user) {
-        userValidator.validate(user);
-        if (userDao.findByEmail(user.getEmail()).isPresent()) {
-            userValidator.putIssue("email", "user.already.exist");
-            throw new IncorrectDataException(userValidator.getErrorMessageByIssues());
+        Optional<UserEntity> userEntity = userRepository.findByEmail(user.getEmail());
+        if (!userEntity.isPresent()) {
+            userRepository.save(mapUserDomainToUserEntity(user));
         }
-        addByType(user, userValidator, obj -> userDao.save(mapUserToEntityUser(obj)));
+        throw new IncorrectDataException("user.with.email.already.exists");
     }
 
     @Override
     public void modify(User user) {
-        modifyByType(user, userValidator, obj -> userDao.update(mapUserToEntityUser(obj)));
+        userRepository.save(mapUserDomainToUserEntity(user));
     }
 
     @Override
     public Optional<User> findById(String id) {
-        return findByStringParam(id, userValidator, intId -> userDao.findById(intId).map(EntityMapper::mapUserEntityToUser));
+        return findByStringParam(id, userRepository::findById).map(Mapper::mapUserEntityToUserDomain);
     }
 
     @Override
-    public void delete(String id) {
-        deleteByStringId(id, userValidator, intId -> userDao.deleteById(intId));
-    }
-
-    @Override
-    public void setLocale(Locale locale) {
-        userValidator.setLocale(locale);
+    public void delete(User user) {
+        userRepository.delete(mapUserDomainToUserEntity(user));
     }
 }

@@ -1,4 +1,8 @@
 package ua.foodtracker.domain;
 
-public class Gender {
+public enum Gender {
+    MALE,
+    FEMALE,
+    OTHER,
+    NOT_SELECTED;
 }

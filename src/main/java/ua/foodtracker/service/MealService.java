@@ -1,9 +1,8 @@
 package ua.foodtracker.service;
 
-import ua.foodtracker.service.domain.Meal;
+import ua.foodtracker.domain.Meal;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 public interface MealService {
@@ -13,11 +12,9 @@ public interface MealService {
 
     void add(Meal meal);
 
-    void delete(String id);
+    void delete(Meal meal);
 
     void modify(Meal meal);
 
     Optional<Meal> findById(String id);
-
-    void setLocale(Locale locale);
 }

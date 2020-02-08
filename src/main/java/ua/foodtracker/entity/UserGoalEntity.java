@@ -1,96 +1,36 @@
 package ua.foodtracker.entity;
 
-/**
- * Entity class of user goals
- */
+import lombok.Data;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Data
+@Table(name = "user_goals")
 public class UserGoalEntity {
-    private final Integer id;
-    private final Integer dailyEnergyGoal;
-    private final Integer dailyFatGoal;
-    private final Integer dailyProteinGoal;
-    private final Integer dailyCarbohydrateGoal;
-    private final Integer dailyWaterGoal;
 
-    public UserGoalEntity(Builder builder) {
-        this.id = builder.id;
-        this.dailyEnergyGoal = builder.dailyEnergyGoal;
-        this.dailyFatGoal = builder.dailyFatGoal;
-        this.dailyProteinGoal = builder.dailyProteinGoal;
-        this.dailyCarbohydrateGoal = builder.dailyCarbohydrateGoal;
-        this.dailyWaterGoal = builder.dailyWaterGoal;
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Integer id;
 
-    public Integer getDailyEnergyGoal() {
-        return dailyEnergyGoal;
-    }
+    @Column(name = "daily_energy", nullable = false)
+    private Integer dailyEnergyGoal;
 
-    public Integer getDailyFatGoal() {
-        return dailyFatGoal;
-    }
+    @Column(name = "daily_fat", nullable = false)
+    private Integer dailyFatGoal;
 
-    public Integer getDailyProteinGoal() {
-        return dailyProteinGoal;
-    }
+    @Column(name = "daily_protein", nullable = false)
+    private Integer dailyProteinGoal;
 
-    public Integer getDailyCarbohydrateGoal() {
-        return dailyCarbohydrateGoal;
-    }
+    @Column(name = "daily_carbohydrate", nullable = false)
+    private Integer dailyCarbohydrateGoal;
 
-    public Integer getDailyWaterGoal() {
-        return dailyWaterGoal;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    public static class Builder {
-        private Integer id;
-        private Integer dailyEnergyGoal;
-        private Integer dailyFatGoal;
-        private Integer dailyProteinGoal;
-        private Integer dailyCarbohydrateGoal;
-        private Integer dailyWaterGoal;
-
-        private Builder() {
-        }
-
-        public Builder withId(Integer id) {
-            this.id = id;
-            return this;
-        }
-
-        public Builder withDailyEnergyGoal(Integer dailyEnergyGoal) {
-            this.dailyEnergyGoal = dailyEnergyGoal;
-            return this;
-        }
-
-        public Builder withDailyFatGoal(Integer dailyFatGoal) {
-            this.dailyFatGoal = dailyFatGoal;
-            return this;
-        }
-
-        public Builder withDailyProteinGoal(Integer dailyProteinGoal) {
-            this.dailyProteinGoal = dailyProteinGoal;
-            return this;
-        }
-
-        public Builder withDailyCarbohydrateGoal(Integer dailyCarbohydrateGoal) {
-            this.dailyCarbohydrateGoal = dailyCarbohydrateGoal;
-            return this;
-        }
-
-        public Builder withDailyWaterGoal(Integer dailyWaterGoal) {
-            this.dailyWaterGoal = dailyWaterGoal;
-            return this;
-        }
-
-        public UserGoalEntity build() {
-            return new UserGoalEntity(this);
-        }
-    }
+    @Column(name = "daily_water", nullable = false)
+    private Integer dailyWaterGoal;
 }

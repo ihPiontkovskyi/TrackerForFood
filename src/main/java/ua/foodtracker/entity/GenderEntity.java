@@ -1,15 +1,12 @@
 package ua.foodtracker.entity;
 
-/**
- * Enum which contain user genders
- */
-public enum Gender {
+public enum GenderEntity {
     MALE,
     FEMALE,
     OTHER,
     NOT_SELECTED;
 
-    public static Gender getGenderById(Integer id) {
+    public static GenderEntity getGenderById(Integer id) {
         if (id == null) {
             return NOT_SELECTED;
         }

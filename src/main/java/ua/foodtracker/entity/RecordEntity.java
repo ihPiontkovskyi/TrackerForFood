@@ -1,75 +1,37 @@
 package ua.foodtracker.entity;
 
-import java.sql.Date;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.time.LocalDate;
 
-/**
- * Entity class of Record
- */
+@Entity
+@Data
+@Table(name = "records")
 public class RecordEntity {
-    private final Integer id;
-    private final MealEntity mealEntity;
-    private final LocalDate date;
-    private final Integer userId;
 
-    public RecordEntity(Builder builder) {
-        this.id = builder.id;
-        this.mealEntity = builder.mealEntity;
-        this.date = builder.date;
-        this.userId = builder.userId;
-    }
+    @Id
+    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
 
-    public Integer getId() {
-        return id;
-    }
+    @OneToOne
+    @JoinColumn(name = "meal_id", nullable = false)
+    private MealEntity meal;
 
-    public MealEntity getMealEntity() {
-        return mealEntity;
-    }
+    @Column(name = "date", nullable = false)
+    private LocalDate date;
 
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    public static class Builder {
-        private Integer id;
-        private MealEntity mealEntity;
-        private LocalDate date;
-        private Integer userId;
-
-        private Builder() {
-        }
-
-        public Builder withId(Integer id) {
-            this.id = id;
-            return this;
-        }
-
-        public Builder withMeal(MealEntity mealEntity) {
-            this.mealEntity = mealEntity;
-            return this;
-        }
-
-        public Builder withDate(LocalDate date) {
-            this.date = date;
-            return this;
-        }
-
-        public Builder withUserId(Integer userId) {
-            this.userId = userId;
-            return this;
-        }
-
-        public RecordEntity build() {
-            return new RecordEntity(this);
-        }
-    }
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
 }

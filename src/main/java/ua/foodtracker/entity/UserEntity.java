@@ -1,167 +1,62 @@
 package ua.foodtracker.entity;
 
-import java.sql.Date;
+import lombok.Data;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import java.time.LocalDate;
+
+@Entity
+@Data
+@Table(name = "users")
 public class UserEntity {
-    private final Integer id;
-    private final String email;
-    private final String password;
-    private final String firstName;
-    private final String lastName;
-    private final Integer weight;
-    private final Integer height;
-    private final Lifestyle lifestyle;
-    private final Date birthday;
-    private final Gender gender;
-    private final UserGoalEntity userGoalEntity;
-    private final Role role;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
+    private Integer id;
 
-    private UserEntity(Builder builder) {
-        this.id = builder.id;
-        this.email = builder.email;
-        this.password = builder.password;
-        this.firstName = builder.firstName;
-        this.lastName = builder.lastName;
-        this.weight = builder.weight;
-        this.height = builder.height;
-        this.lifestyle = builder.lifestyle;
-        this.birthday = builder.birthday;
-        this.gender = builder.gender;
-        this.role = builder.role;
-        this.userGoalEntity = builder.userGoalEntity;
-    }
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
 
-    public Integer getId() {
-        return id;
-    }
+    @Column(name = "password", nullable = false)
+    private String password;
 
-    public String getEmail() {
-        return email;
-    }
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
 
-    public String getPassword() {
-        return password;
-    }
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
 
-    public String getFirstName() {
-        return firstName;
-    }
+    @Column(name = "weight", nullable = false)
+    private Integer weight;
 
-    public String getLastName() {
-        return lastName;
-    }
+    @Column(name = "height", nullable = false)
+    private Integer height;
 
-    public Integer getWeight() {
-        return weight;
-    }
+    @Enumerated(EnumType.STRING)
+    @Column(name = "lifestyle", nullable = false)
+    private LifestyleEntity lifestyle;
 
-    public Integer getHeight() {
-        return height;
-    }
+    @Column(name = "birthday", nullable = false)
+    private LocalDate birthday;
 
-    public Lifestyle getLifestyle() {
-        return lifestyle;
-    }
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gender", nullable = false)
+    private GenderEntity gender;
 
-    public Date getBirthday() {
-        return birthday;
-    }
+    @OneToOne
+    @JoinColumn(name = "user_goal_id", nullable = false)
+    private UserGoalEntity userGoal;
 
-    public Gender getGender() {
-        return gender;
-    }
-
-    public UserGoalEntity getUserGoalEntity() {
-        return userGoalEntity;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    public static class Builder {
-        private Integer id;
-        private String email;
-        private String password;
-        private String firstName;
-        private String lastName;
-        private Integer weight;
-        private Integer height;
-        private Lifestyle lifestyle;
-        private Date birthday;
-        private Gender gender;
-        private UserGoalEntity userGoalEntity;
-        private Role role;
-
-        private Builder() {
-        }
-
-        public Builder withId(Integer id) {
-            this.id = id;
-            return this;
-        }
-
-        public Builder withEmail(String email) {
-            this.email = email;
-            return this;
-        }
-
-        public Builder withPassword(String password) {
-            this.password = password;
-            return this;
-        }
-
-        public Builder withFirstName(String firstName) {
-            this.firstName = firstName;
-            return this;
-        }
-
-        public Builder withLastName(String lastName) {
-            this.lastName = lastName;
-            return this;
-        }
-
-        public Builder withWeight(Integer weight) {
-            this.weight = weight;
-            return this;
-        }
-
-        public Builder withHeight(Integer height) {
-            this.height = height;
-            return this;
-        }
-
-        public Builder withLifestyle(Lifestyle lifestyle) {
-            this.lifestyle = lifestyle;
-            return this;
-        }
-
-        public Builder withBirthday(Date birthday) {
-            this.birthday = birthday;
-            return this;
-        }
-
-        public Builder withGender(Gender gender) {
-            this.gender = gender;
-            return this;
-        }
-
-        public Builder withUserGoal(UserGoalEntity userGoalEntity) {
-            this.userGoalEntity = userGoalEntity;
-            return this;
-        }
-
-        public Builder withRole(Role role) {
-            this.role = role;
-            return this;
-        }
-
-        public UserEntity build() {
-            return new UserEntity(this);
-        }
-    }
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private RoleEntity role;
 }
