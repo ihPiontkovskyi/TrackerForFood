@@ -36,4 +36,8 @@ public class Meal {
     @Positive(message = "meal.water.not.positive.exception.message")
     @NotNull(message = "meal.water.null.exception.message")
     private Integer water;
+
+    public Integer calculateEnergy() {
+        return carbohydrate * 4 + protein * 4 + fat * 9;
+    }
 }

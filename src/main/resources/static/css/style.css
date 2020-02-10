@@ -570,8 +570,12 @@ aside.left-panel {
     background-image: linear-gradient(179.1deg, rgba(247, 238, 238, 1) -1.9%, rgba(247, 202, 201, 1) 44.9%, rgba(145, 168, 208, 1) 96.1%);
 }
 
-.lang-block{
+.lang-block {
     position: absolute;
     right: 72px;
     top: 14px;
+}
+
+.inline {
+    display: inline;
 }

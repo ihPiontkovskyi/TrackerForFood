@@ -26,13 +26,13 @@ public class MealServiceImpl implements MealService {
     @Override
     public Page<Meal> findAllByPage(String pageNumber) {
         if (pageNumber == null) {
-            return mealRepository.findAll(PageRequest.of(1, ITEMS_PER_PAGE)).map(Mapper::mapMealEntityToMealDomain);
+            return mealRepository.findAll(PageRequest.of(0, ITEMS_PER_PAGE)).map(Mapper::mapMealEntityToMealDomain);
         }
         try {
             return mealRepository.findAll(PageRequest.of(Integer.parseInt(pageNumber), ITEMS_PER_PAGE)).map(Mapper::mapMealEntityToMealDomain);
         } catch (NumberFormatException ex) {
 
-            return mealRepository.findAll(PageRequest.of(1, ITEMS_PER_PAGE)).map(Mapper::mapMealEntityToMealDomain);
+            return mealRepository.findAll(PageRequest.of(0, ITEMS_PER_PAGE)).map(Mapper::mapMealEntityToMealDomain);
         }
     }
 

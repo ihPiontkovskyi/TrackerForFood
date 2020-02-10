@@ -18,8 +18,7 @@
                 <li>
                     <a href="home">
                         <em class="menu-icon fa fa-bar-chart"></em>
-                        <span th:text="#{highlights.btn}"></span>
-                    </a>
+                        <span th:text="#{highlights.btn}"></span></a>
                 </li>
                 <li>
                     <a href="records"> <em class="menu-icon fa fa-calendar"></em>
@@ -44,11 +43,12 @@
         </div>
         <div class="top-right">
             <div class="header-menu">
-                <div class="user-area dropdown">
+                <div class="user-area dropdown float-right">
                     <a href="#" class="dropdown-toggle active" data-toggle="dropdown" aria-haspopup="true"
                        aria-expanded="false">
                         <em class="fa fa-user-circle"></em>
                     </a>
+
                     <div class="user-menu dropdown-menu">
                         <a class="nav-link" href="settings"><em class="fa fa -cog"></em>
                             <span th:text="#{settings.btn}"></span>
@@ -59,10 +59,9 @@
                         </a>
                     </div>
                 </div>
-
                 <div class="lang-block">
-                    <a href="?lang=en">EN</a>
-                    <a href="?lang=ru">RU</a>
+                    <a th:href="@{/records(lang='en', date=${date})}">EN</a>
+                    <a th:href="@{/records(lang='ru', date=${date})}">RU</a>
                 </div>
             </div>
         </div>
@@ -80,7 +79,8 @@
                                 <div class="stat-content">
                                     <div class="text-left dib">
                                         <div class="stat-text">
-                                            <span class="count" th:text="${homeModel.getDsto().getSumEnergy()}"></span>
+                                            <span id="energy" class="count"
+                                                  th:text="${dailySums.getSumEnergy()}"></span>
                                             <span th:text="#{kcal.field}"></span>
                                         </div>
                                         <div class="stat-heading">
@@ -103,7 +103,8 @@
                                 <div class="stat-content">
                                     <div class="text-left dib">
                                         <div class="stat-text">
-                                            <span class="count" th:text="${homeModel.getDsto().getSumProtein()}"></span>
+                                            <span id="protein" class="count"
+                                                  th:text="${dailySums.getSumProtein()}"></span>
                                             <span th:text="#{weight.label}"></span>
                                         </div>
                                         <div class="stat-heading">
@@ -126,8 +127,8 @@
                                 <div class="stat-content">
                                     <div class="text-left dib">
                                         <div class="stat-text">
-                                            <span class="count"
-                                                  th:text="${homeModel.getDsto().getSumCarbohydrates()}"></span>
+                                            <span id="carb" class="count"
+                                                  th:text="${dailySums.getSumCarbohydrates()}"></span>
                                             <span th:text="#{weight.label}"></span>
                                         </div>
                                         <div class="stat-heading">
@@ -150,7 +151,7 @@
                                 <div class="stat-content">
                                     <div class="text-left dib">
                                         <div class="stat-text">
-                                            <span class="count" th:text="${homeModel.getDsto().getSumWater()}"></span>
+                                            <span id="water" class="count" th:text="${dailySums.getSumWater()}"></span>
                                             <span th:text="#{volume.label}"></span>
                                         </div>
                                         <div class="stat-heading">
@@ -163,79 +164,97 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-xl-8">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="box-title">
-                                <span th:text="#{last.week.label}"></span>
-                            </h4>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-8">
-                                <div class="card-body">
-                                    <div id="traffic-chart" class="traffic-chart"></div>
+            <div class="orders">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-2">
+                                        <h4 class="box-title" id="title">
+                                            <span th:text="#{daily.food}"></span>
+                                            <span th:text="${date}"></span>
+                                        </h4>
+                                    </div>
+                                    <div class="col-lg-10">
+                                        <a
+                                                th:href="@{/records(date=${date.minusDays(1)})}" class="btn"><i
+                                                class="fa fa-arrow-left"
+                                                aria-hidden="true"></i></a>
+                                        <a
+                                                th:href="@{/records(date=${date.plusDays(1)})}" class="btn"><i
+                                                class="fa fa-arrow-right"
+                                                aria-hidden="true"></i></a>
+                                        <a th:href="@{/records/add}" class="btn float-right"><i class="fa fa-plus"
+                                                                                                aria-hidden="true"></i></a>
+
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="box-title">
-                                <span th:text="#{daily.goal.label}"></span>
-                            </h4>
-                            <div class="card-body">
-                                <div class="progress-box progress-1">
-                                    <h4 class="por-title">
-                                        <span th:text="#{energy.label}"></span>
-                                    </h4>
-                                    <div class="progress mb-2" style="height: 5px;">
-                                        <div class="progress-bar bg-flat-color-1" role="progressbar"
-                                             th:style="|width: ${homeModel.getDailyEnergyGoal()}%|"
-                                             aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                                <div class="progress-box progress-2">
-                                    <h4 class="por-title">
-                                        <span th:text="#{water.label}"></span>
-                                    </h4>
-                                    <div class="progress mb-2" style="height: 5px;">
-                                        <div class="progress-bar bg-flat-color-2" role="progressbar"
-                                             th:style="|width: ${homeModel.getDailyWaterGoal()}%|"
-                                             aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                                <div class="progress-box progress-2">
-                                    <h4 class="por-title">
-                                        <span th:text="#{carbohydrate.label}"></span>
-                                    </h4>
-                                    <div class="progress mb-2" style="height: 5px;">
-                                        <div class="progress-bar bg-flat-color-3" role="progressbar"
-                                             th:style="|width: ${homeModel.getDailyCarbohydratesGoal()}%|"
-                                             aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                                <div class="progress-box progress-2">
-                                    <h4 class="por-title">
-                                        <span th:text="#{protein.label}"></span>
-                                    </h4>
-                                    <div class="progress mb-2" style="height: 5px;">
-                                        <div class="progress-bar bg-flat-color-4" role="progressbar"
-                                             th:style="|width: ${homeModel.getDailyProteinGoal()}%|"
-                                             aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                                <div class="progress-box progress-2">
-                                    <h4 class="por-title">
-                                        <span th:text="#{fat.label}"></span>
-                                    </h4>
-                                    <div class="progress mb-2" style="height: 5px;">
-                                        <div class="progress-bar bg-flat-color-5" role="progressbar"
-                                             th:style="|width: ${homeModel.getDailyFatGoal()}%|"
-                                             aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
+                            <div class="card-body--">
+                                <div class="table-stats order-table ov-h">
+                                    <table class="table ">
+                                        <thead>
+                                        <tr>
+                                            <th id="name-col">
+                                                <span th:text="#{name.label}"></span>
+                                            </th>
+                                            <th id="protein-col">
+                                                <span th:text="#{protein.label}"></span>
+                                                ,
+                                                <span th:text="#{weight.label}"></span>
+                                            </th>
+                                            <th id="carb-col">
+                                                <span th:text="#{carbohydrate.label}"></span>
+                                                ,
+                                                <span th:text="#{weight.label}"></span>
+                                            </th>
+                                            <th id="fat-col">
+                                                <span th:text="#{fat.label}"></span>
+                                                ,
+                                                <span th:text="#{weight.label}"></span>
+                                            </th>
+                                            <th id="energy-col">
+                                                <span th:text="#{energy.label}"></span>
+                                                ,
+                                                <span th:text="#{kcal.field}"></span>
+                                            </th>
+                                            <th id="weight-col">
+                                                <span th:text="#{weight.column.label}"></span>
+                                            </th>
+                                            <th id="water-col">
+                                                <span th:text="#{water.label}"></span>
+                                                ,
+                                                <span th:text="#{volume.label}"></span>
+                                            </th>
+                                            <th id="action-col">
+                                                <span th:text="#{action.label}"></span>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <th:block th:each="record:${records}">
+                                            <tr>
+                                                <td hidden th:text="${record.getId()}"></td>
+                                                <td th:text="${record.getMeal().getName()}"></td>
+                                                <td th:text="${record.getMeal().getProtein()}"></td>
+                                                <td th:text="${record.getMeal().getCarbohydrate()}"></td>
+                                                <td th:text="${record.getMeal().getFat()}"></td>
+                                                <td th:text="${record.getMeal().calculateEnergy()}"></td>
+                                                <td th:text="${record.getMeal().getWeight()}"></td>
+                                                <td th:text="${record.getMeal().getWater()}"></td>
+                                                <td><a th:href="@{/records/delete(id=${record.id})}"
+                                                       class="btn float-right"><i
+                                                        class="fa fa-minus"
+                                                        aria-hidden="true"></i></a>
+                                                    <a th:href="@{/records/edit(id=${record.id})}"
+                                                       class="btn float-right"><i
+                                                            class="fa fa-pencil"
+                                                            aria-hidden="true"></i></a>
+                                                </td>
+                                        </th:block>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -250,50 +269,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 <script src="https://use.fontawesome.com/59810e450d.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartist@0.11.0/dist/chartist.min.js"></script>
-<script th:inline="javascript">
-    jQuery(document).ready(function ($) {
-        if ($('#traffic-chart').length) {
-            let labels = [[${homeModel.getLabels()}]];
-            let protein = [[${homeModel.getProteinWeeklyStat()}]];
-            let carb = [[${homeModel.getCarbWeeklyStat()}]];
-            let energy = [[${homeModel.getEnergyWeeklyStat()}]];
-            let water = [[${homeModel.getWaterWeeklyStat()}]];
-            let fat = [[${homeModel.getFatWeeklyStat()}]];
-            let chart = new Chartist.Line('#traffic-chart', {
-                labels: labels,
-                series: [
-                    energy,
-                    water,
-                    carb,
-                    fat,
-                    protein
-                ]
-            }, {
-                low: 0,
-                showArea: true,
-                showLine: true,
-                showPoint: false,
-                fullWidth: true,
-                axisX: {
-                    showGrid: true
-                }
-            });
-            chart.on('draw', function (data) {
-                if (data.type === 'line' || data.type === 'area') {
-                    data.element.animate({
-                        d: {
-                            begin: 2000 * data.index,
-                            dur: 2000,
-                            from: data.path.clone().scale(1, 0).translate(0, data.chartRect.height()).stringify(),
-                            to: data.path.clone().stringify(),
-                            easing: Chartist.Svg.Easing.easeOutQuint
-                        }
-                    });
-                }
-            });
-        }
-    });
+<script type="text/javascript">
 </script>
 </body>
 </html>

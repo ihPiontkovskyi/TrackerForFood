@@ -1,0 +1,171 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Food Tracker</title>
+    <link rel="icon" type="image/png" th:href="@{/images/logo-002.png}"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/pixeden-stroke-7-icon@1.2.3/pe-icon-7-stroke/dist/pe-icon-7-stroke.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/chartist@0.11.0/dist/chartist.min.css" rel="stylesheet">
+</head>
+
+<body>
+<aside id="left-panel" class="left-panel">
+    <nav class="navbar navbar-expand-sm navbar-default">
+        <div id="main-menu" class="main-menu collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="home">
+                        <em class="menu-icon fa fa-bar-chart"></em>
+                        <span th:text="#{highlights.btn}"></span></a>
+                </li>
+                <li>
+                    <a href="records"> <em class="menu-icon fa fa-calendar"></em>
+                        <span th:text="#{diary.btn}"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="meals"> <em class="menu-icon fa fa-cutlery"></em>
+                        <span th:text="#{meals.btn}"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</aside>
+<div id="right-panel" class="right-panel">
+    <header id="header" class="header">
+        <div class="top-left">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="home"><img th:src="@{/images/logo-001.png}" alt="Logo"></a>
+            </div>
+        </div>
+        <div class="top-right">
+            <div class="header-menu">
+                <div class="user-area dropdown float-right">
+                    <a href="#" class="dropdown-toggle active" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">
+                        <em class="fa fa-user-circle"></em>
+                    </a>
+
+                    <div class="user-menu dropdown-menu">
+                        <a class="nav-link" href="settings"><em class="fa fa -cog"></em>
+                            <span th:text="#{settings.btn}"></span>
+                        </a>
+
+                        <a class="nav-link" href="logout"><em class="fa fa-power -off"></em>
+                            <span th:text="#{logout.btn}"></span>
+                        </a>
+                    </div>
+                </div>
+                <div class="lang-block">
+                    <a th:href="@{/meals(lang='en',page=${page})}">EN</a>
+                    <a th:href="@{/meals(lang='ru',page=${page})}">RU</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="content bg-gra-02">
+        <div class="animated fadeIn">
+            <div class="orders">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-2">
+                                        <h4 class="box-title">Meal</h4>
+
+                                        <div th:if="${totalPages > 0}" class="inline"
+                                             th:each="pageNumber : ${pageNumbers}">
+                                            <a th:href="@{/meals(page=${pageNumber})}"
+                                               th:text="${pageNumber+1}"
+                                               th:class="${pageNumber+1==page} ? active"></a>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-10">
+                                        <a class="btn float-right"><i class="fa fa-plus" aria-hidden="true"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body--">
+                                <div class="table-stats order-table ov-h">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th id="name-col">
+                                                <span th:text="#{name.label}"></span>
+                                            </th>
+                                            <th id="protein-col">
+                                                <span th:text="#{protein.label}"></span>
+                                                ,
+                                                <span th:text="#{weight.label}"></span>
+                                            </th>
+                                            <th id="carb-col">
+                                                <span th:text="#{carbohydrate.label}"></span>
+                                                ,
+                                                <span th:text="#{weight.label}"></span>
+                                            </th>
+                                            <th id="fat-col">
+                                                <span th:text="#{fat.label}"></span>
+                                                ,
+                                                <span th:text="#{weight.label}"></span>
+                                            </th>
+                                            <th id="energy-col">
+                                                <span th:text="#{energy.label}"></span>
+                                                ,
+                                                <span th:text="#{kcal.field}"></span>
+                                            </th>
+                                            <th id="weight-col">
+                                                <span th:text="#{weight.column.label}"></span>
+                                            </th>
+                                            <th id="water-col">
+                                                <span th:text="#{water.label}"></span>
+                                                ,
+                                                <span th:text="#{volume.label}"></span>
+                                            </th>
+                                            <th id="action-col">
+                                                <span th:text="#{action.label}"></span>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <th:block th:each="meal:${meals}">
+                                            <tr>
+                                                <td hidden th:text="${meal.getId()}"></td>
+                                                <td th:text="${meal.getName()}"></td>
+                                                <td th:text="${meal.getProtein()}"></td>
+                                                <td th:text="${meal.getCarbohydrate()}"></td>
+                                                <td th:text="${meal.getFat()}"></td>
+                                                <td th:text="${meal.calculateEnergy()}"></td>
+                                                <td th:text="${meal.getWeight()}"></td>
+                                                <td th:text="${meal.getWater()}"></td>
+                                                <td><a th:href="@{/meals/delete(id=${meal.getId()})}"
+                                                       class="btn float-right"><i
+                                                        class="fa fa-minus"
+                                                        aria-hidden="true"></i></a>
+                                                    <a th:href="@{/meals/edit(id=${meal.getId()})}"
+                                                       class="btn float-right"><i
+                                                            class="fa fa-pencil"
+                                                            aria-hidden="true"></i></a>
+                                                </td>
+                                        </th:block>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script src="https://use.fontawesome.com/59810e450d.js"></script>
+</body>
+</html>
