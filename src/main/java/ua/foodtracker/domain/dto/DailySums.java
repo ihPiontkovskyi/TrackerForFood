@@ -2,10 +2,6 @@ package ua.foodtracker.domain.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import ua.foodtracker.domain.Meal;
-import ua.foodtracker.domain.Record;
-
-import java.util.List;
 
 @Data
 @Builder

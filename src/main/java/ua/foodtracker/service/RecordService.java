@@ -13,7 +13,7 @@ public interface RecordService {
 
     void add(Record record);
 
-    void delete(Record record);
+    void delete(String id, User user);
 
     void modify(Record record);
 

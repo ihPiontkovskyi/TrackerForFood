@@ -60,12 +60,6 @@ public class AppController {
         return "home";
     }
 
-    @GetMapping(value = "/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "login";
-    }
-
     @GetMapping(value = "/meals")
     public String mealPage(Model model, @RequestParam("page") Optional<String> page) {
         long totalPages = mealService.pageCount();
@@ -79,6 +73,18 @@ public class AppController {
         model.addAttribute("page", parseOrDefault(page, 0L));
         model.addAttribute("meals", mealService.findAllByPage(page.orElse("1")));
         return "meals";
+    }
+
+    @GetMapping(value = "/meals/delete")
+    public String deleteMeal(@RequestParam("id") String id, @SessionAttribute("user") User user) {
+        mealService.delete(id, user);
+        return "redirect:meals";
+    }
+
+    @GetMapping(value = "/records/delete")
+    public String deleteRecord(@RequestParam("id") String id, @SessionAttribute("user") User user) {
+        recordService.delete(id, user);
+        return "redirect:/records";
     }
 
     @GetMapping(value = "/records")

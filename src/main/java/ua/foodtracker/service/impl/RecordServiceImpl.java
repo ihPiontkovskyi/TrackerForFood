@@ -8,8 +8,11 @@ import ua.foodtracker.domain.Record;
 import ua.foodtracker.domain.User;
 import ua.foodtracker.domain.dto.DailySums;
 import ua.foodtracker.domain.dto.HomeModel;
+import ua.foodtracker.entity.RecordEntity;
+import ua.foodtracker.entity.RoleEntity;
 import ua.foodtracker.repository.RecordRepository;
 import ua.foodtracker.service.RecordService;
+import ua.foodtracker.service.exception.IncorrectDataException;
 import ua.foodtracker.service.utility.Mapper;
 
 import java.time.LocalDate;
@@ -53,8 +56,18 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public void delete(Record record) {
-        recordRepository.delete(mapRecordDomainToRecordEntity(record));
+    public void delete(String id, User user) {
+        Optional<RecordEntity> entity = findByStringParam(id, recordRepository::findById);
+        if (entity.isPresent()) {
+            if (entity.get().getUser().getRole() == RoleEntity.ADMIN
+                    || entity.get().getUser().getId().equals(user.getId())) {
+                recordRepository.delete(entity.get());
+                return;
+            } else {
+                throw new IncorrectDataException("access.denied");
+            }
+        }
+        throw new IncorrectDataException("incorrect.data");
     }
 
     @Override
