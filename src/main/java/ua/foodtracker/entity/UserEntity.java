@@ -2,6 +2,7 @@ package ua.foodtracker.entity;
 
 import lombok.Data;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -52,7 +53,7 @@ public class UserEntity {
     @Column(name = "gender", nullable = false)
     private GenderEntity gender;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_goal_id", nullable = false)
     private UserGoalEntity userGoal;
 

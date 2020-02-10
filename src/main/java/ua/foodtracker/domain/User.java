@@ -2,6 +2,8 @@ package ua.foodtracker.domain;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -11,7 +13,6 @@ import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 
 @Data
-@Builder()
 public class User {
 
     private Integer id;
@@ -21,6 +22,9 @@ public class User {
 
     @Pattern(regexp = "^[a-zA-Z0-9]{4,32}$", message = "user.password.exception.message")
     private String password;
+
+    @Pattern(regexp = "^[a-zA-Z0-9]{4,32}$", message = "user.password.exception.message")
+    private String repeatPassword;
 
     @Pattern(regexp = "^[a-zA-zа-яА-Я]{3,32}$", message = "user.first.name.exception.message")
     private String firstName;
@@ -39,6 +43,7 @@ public class User {
     @NotNull(message = "user.lifestyle.null.exception.message")
     private Lifestyle lifestyle;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @PastOrPresent(message = "user.birthday.should.be.past.or.present")
     @NotNull(message = "user.birthday.null.exception.message")
     private LocalDate birthday;

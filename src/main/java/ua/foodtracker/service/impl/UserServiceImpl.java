@@ -13,9 +13,9 @@ import ua.foodtracker.service.utility.Mapper;
 import java.util.Optional;
 
 import static org.springframework.security.crypto.bcrypt.BCrypt.checkpw;
-import static ua.foodtracker.service.utility.ServiceUtility.findByStringParam;
 import static ua.foodtracker.service.utility.Mapper.mapUserDomainToUserEntity;
 import static ua.foodtracker.service.utility.Mapper.mapUserEntityToUserDomain;
+import static ua.foodtracker.service.utility.ServiceUtility.findByStringParam;
 
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User login(String email, String pass) {
         Optional<UserEntity> userEntity = userRepository.findByEmail(email);
-        if (userEntity.isPresent() && checkpw(userEntity.get().getPassword(), pass)) {
+        if (userEntity.isPresent() && checkpw(pass, userEntity.get().getPassword())) {
             return mapUserEntityToUserDomain(userEntity.get());
         }
         throw new IncorrectDataException("incorrect.email.or.password");
@@ -35,9 +35,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void register(User user) {
-        Optional<UserEntity> userEntity = userRepository.findByEmail(user.getEmail());
-        if (!userEntity.isPresent()) {
+        if (!user.getPassword().equals(user.getRepeatPassword())) {
+            throw new IncorrectDataException("passwords.do.not.match");
+        }
+        if (!userRepository.existsByEmail(user.getEmail())) {
             userRepository.save(mapUserDomainToUserEntity(user));
+            return;
         }
         throw new IncorrectDataException("user.with.email.already.exists");
     }

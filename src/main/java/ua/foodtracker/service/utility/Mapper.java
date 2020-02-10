@@ -83,27 +83,30 @@ public class Mapper {
         entity.setLifestyle(LifestyleEntity.valueOf(user.getLifestyle().name()));
         entity.setId(user.getId());
         entity.setPassword(hashpw(user.getPassword(), gensalt()));
-        entity.setRole(RoleEntity.valueOf(user.getRole().name()));
+        entity.setRole(user.getRole() == null ? RoleEntity.USER : RoleEntity.valueOf(user.getRole().name()));
         entity.setWeight(user.getWeight());
         entity.setUserGoal(buildUserGoalEntity(user));
         return entity;
     }
 
     public static User mapUserEntityToUserDomain(UserEntity entity) {
-        return entity == null ? null : User.builder()
-                .birthday(entity.getBirthday())
-                .firstName(entity.getFirstName())
-                .email(entity.getFirstName())
-                .gender(Gender.valueOf(entity.getGender().name()))
-                .height(entity.getHeight())
-                .id(entity.getId())
-                .lastName(entity.getLastName())
-                .lifestyle(Lifestyle.valueOf(entity.getLifestyle().name()))
-                .password(entity.getPassword())
-                .role(Role.valueOf(entity.getRole().name()))
-                .weight(entity.getWeight())
-                .userGoal(buildUserGoal(entity))
-                .build();
+        if (entity == null) {
+            return null;
+        }
+        User user = new User();
+        user.setBirthday(entity.getBirthday());
+        user.setFirstName(entity.getFirstName());
+        user.setEmail(entity.getFirstName());
+        user.setGender(Gender.valueOf(entity.getGender().name()));
+        user.setHeight(entity.getHeight());
+        user.setId(entity.getId());
+        user.setLastName(entity.getLastName());
+        user.setLifestyle(Lifestyle.valueOf(entity.getLifestyle().name()));
+        user.setPassword(entity.getPassword());
+        user.setRole(Role.valueOf(entity.getRole().name()));
+        user.setWeight(entity.getWeight());
+        user.setUserGoal(buildUserGoal(entity));
+        return user;
     }
 
     private static UserGoalEntity buildUserGoalEntity(User user) {

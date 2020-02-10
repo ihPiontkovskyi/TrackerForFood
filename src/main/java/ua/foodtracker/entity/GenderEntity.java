@@ -3,22 +3,21 @@ package ua.foodtracker.entity;
 public enum GenderEntity {
     MALE,
     FEMALE,
-    OTHER,
-    NOT_SELECTED;
+    OTHER;
 
-    public static GenderEntity getGenderById(Integer id) {
+    public static GenderEntity
+
+    getGenderById(Integer id) {
         if (id == null) {
-            return NOT_SELECTED;
+            return OTHER;
         }
         switch (id) {
             case 1:
                 return MALE;
             case 2:
                 return FEMALE;
-            case 3:
-                return OTHER;
             default:
-                return NOT_SELECTED;
+                return OTHER;
         }
     }
 

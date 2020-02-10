@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Food Tracker</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="icon" type="image/png" th:href="@{/images/logo-002.png}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/login.css}">
+</head>
+<body>
+<div class="limiter">
+    <div class="lang-block">
+        <a href="?lang=en">EN</a>
+        <a href="?lang=ru">RU</a>
+    </div>
+    <div class="container-login  bg-gra-02">
+        <div class="wrap-login">
+            <form class="login-form" th:action="@{/login}" method="post">
+					<span class="login-form-title" th:text="#{account.login.field}">
+					</span>
+
+                <div class="wrap-input rs1-wrap-input">
+                    <label>
+                        <input class="input" type="text" name="email"
+                               th:placeholder="#{username.field}" required>
+                    </label>
+                    <span class="focus-input"></span>
+                </div>
+                <div class="wrap-input rs2-wrap-input">
+                    <label>
+                        <input class="input" type="password" name="pass"
+                               th:placeholder="#{password.field}" required>
+                    </label>
+                    <span class="focus-input"></span>
+                </div>
+
+                <div class="container-login-form-btn">
+                    <button class="login-form-btn" type="submit" th:text="#{login.btn}">
+                    </button>
+                </div>
+                <div class="w-full text-center forgot-block">
+                    <a class="txt2"></a>
+                </div>
+                <div class="w-full text-center">
+                    <a th:href="@{/register}" class="txt3" th:text="#{sign.up.btn}">
+                    </a>
+                </div>
+            </form>
+            <div th:with="condition=${#locale=='EN_US'}">
+                <div th:if="${condition}" class="login-more"
+                     style="background-image:url('/images/bg-001.jpg');">
+                </div>
+                <div th:unless="${condition}" class="login-more"
+                     style="background-image:url('/images/bg-001-ru.jpg');">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script src="https://use.fontawesome.com/59810e450d.js"></script>
+</body>
+</html>
