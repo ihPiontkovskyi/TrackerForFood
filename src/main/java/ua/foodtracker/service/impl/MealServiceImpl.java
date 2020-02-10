@@ -12,11 +12,10 @@ import ua.foodtracker.entity.MealEntity;
 import ua.foodtracker.repository.MealRepository;
 import ua.foodtracker.service.MealService;
 import ua.foodtracker.service.exception.IncorrectDataException;
-import ua.foodtracker.service.utility.Mapper;
+import ua.foodtracker.service.mapper.impl.MealMapper;
 
 import java.util.Optional;
 
-import static ua.foodtracker.service.utility.Mapper.mapMealDomainToMealEntity;
 import static ua.foodtracker.service.utility.ServiceUtility.findByStringParam;
 import static ua.foodtracker.service.utility.ServiceUtility.getNumberOfPage;
 
@@ -26,18 +25,19 @@ public class MealServiceImpl implements MealService {
     private static final int ITEMS_PER_PAGE = 3;
 
     private final MealRepository mealRepository;
+    private final MealMapper mealMapper;
 
     @Override
     public Page<Meal> findAllByPage(String pageNumber) {
         if (pageNumber == null) {
             //log
-            return mealRepository.findAll(PageRequest.of(0, ITEMS_PER_PAGE)).map(Mapper::mapMealEntityToMealDomain);
+            return mealRepository.findAll(PageRequest.of(0, ITEMS_PER_PAGE)).map(mealMapper::mapToDomain);
         }
         try {
-            return mealRepository.findAll(PageRequest.of(Integer.parseInt(pageNumber), ITEMS_PER_PAGE)).map(Mapper::mapMealEntityToMealDomain);
+            return mealRepository.findAll(PageRequest.of(Integer.parseInt(pageNumber), ITEMS_PER_PAGE)).map(mealMapper::mapToDomain);
         } catch (NumberFormatException ex) {
             //log
-            return mealRepository.findAll(PageRequest.of(0, ITEMS_PER_PAGE)).map(Mapper::mapMealEntityToMealDomain);
+            return mealRepository.findAll(PageRequest.of(0, ITEMS_PER_PAGE)).map(mealMapper::mapToDomain);
         }
     }
 
@@ -48,7 +48,7 @@ public class MealServiceImpl implements MealService {
 
     @Override
     public void add(Meal meal) {
-        mealRepository.save(mapMealDomainToMealEntity(meal));
+        mealRepository.save(mealMapper.mapToEntity(meal));
     }
 
     @Override
@@ -68,11 +68,11 @@ public class MealServiceImpl implements MealService {
 
     @Override
     public void modify(Meal meal) {
-        mealRepository.save(mapMealDomainToMealEntity(meal));
+        mealRepository.save(mealMapper.mapToEntity(meal));
     }
 
     @Override
     public Optional<Meal> findById(String id) {
-        return findByStringParam(id, mealRepository::findById).map(Mapper::mapMealEntityToMealDomain);
+        return findByStringParam(id, mealRepository::findById).map(mealMapper::mapToDomain);
     }
 }

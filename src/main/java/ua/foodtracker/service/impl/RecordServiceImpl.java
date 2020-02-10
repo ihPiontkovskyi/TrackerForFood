@@ -13,7 +13,7 @@ import ua.foodtracker.entity.RoleEntity;
 import ua.foodtracker.repository.RecordRepository;
 import ua.foodtracker.service.RecordService;
 import ua.foodtracker.service.exception.IncorrectDataException;
-import ua.foodtracker.service.utility.Mapper;
+import ua.foodtracker.service.mapper.impl.RecordMapper;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static ua.foodtracker.service.utility.Mapper.mapRecordDomainToRecordEntity;
 import static ua.foodtracker.service.utility.ServiceUtility.findByStringParam;
 
 @Service
@@ -32,6 +31,7 @@ import static ua.foodtracker.service.utility.ServiceUtility.findByStringParam;
 public class RecordServiceImpl implements RecordService {
 
     private final RecordRepository recordRepository;
+    private final RecordMapper recordMapper;
 
     @Override
     public List<Record> getRecordsByDate(User user, String date) {
@@ -40,19 +40,19 @@ public class RecordServiceImpl implements RecordService {
         }
         try {
             return recordRepository.findAllByUserIdAndDate(user.getId(), LocalDate.parse(date)).stream()
-                    .map(Mapper::mapRecordEntityToRecordDomain)
+                    .map(recordMapper::mapToDomain)
                     .collect(Collectors.toList());
         } catch (DateTimeParseException ex) {
             //log
             return recordRepository.findAllByUserIdAndDate(user.getId(), LocalDate.now()).stream()
-                    .map(Mapper::mapRecordEntityToRecordDomain)
+                    .map(recordMapper::mapToDomain)
                     .collect(Collectors.toList());
         }
     }
 
     @Override
     public void add(Record record) {
-        recordRepository.save(mapRecordDomainToRecordEntity(record));
+        recordRepository.save(recordMapper.mapToEntity(record));
     }
 
     @Override
@@ -72,12 +72,12 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public void modify(Record record) {
-        recordRepository.save(mapRecordDomainToRecordEntity(record));
+        recordRepository.save(recordMapper.mapToEntity(record));
     }
 
     @Override
     public Optional<Record> findById(String id) {
-        return findByStringParam(id, recordRepository::findById).map(Mapper::mapRecordEntityToRecordDomain);
+        return findByStringParam(id, recordRepository::findById).map(recordMapper::mapToDomain);
     }
 
     @Override

@@ -16,11 +16,11 @@ import ua.foodtracker.service.UserService;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
+
+import static ua.foodtracker.utility.ParameterParser.parseOrDefault;
 
 @Controller
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -61,7 +61,7 @@ public class AppController {
     }
 
     @GetMapping(value = "/meals")
-    public String mealPage(Model model, @RequestParam("page") Optional<String> page) {
+    public String mealPage(Model model, @RequestParam(value = "page", required = false) String page) {
         long totalPages = mealService.pageCount();
         model.addAttribute("totalPages", totalPages);
         if (totalPages > 0) {
@@ -71,7 +71,7 @@ public class AppController {
             model.addAttribute("pageNumbers", pageNumbers);
         }
         model.addAttribute("page", parseOrDefault(page, 0L));
-        model.addAttribute("meals", mealService.findAllByPage(page.orElse("1")));
+        model.addAttribute("meals", mealService.findAllByPage(page));
         return "meals";
     }
 
@@ -88,32 +88,11 @@ public class AppController {
     }
 
     @GetMapping(value = "/records")
-    public String diaryPage(Model model, @SessionAttribute("user") User user, @RequestParam("date") Optional<String> date) {
+    public String diaryPage(Model model, @SessionAttribute("user") User user,
+                            @RequestParam(value = "date", required = false) String date) {
         model.addAttribute("date", parseOrDefault(date, LocalDate.now()));
-        model.addAttribute("dailySums", recordService.calculateDailySums(user, date.orElseGet(() -> LocalDate.now().toString())));
-        model.addAttribute("records", recordService.getRecordsByDate(user, date.orElseGet(() -> LocalDate.now().toString())));
+        model.addAttribute("dailySums", recordService.calculateDailySums(user, date));
+        model.addAttribute("records", recordService.getRecordsByDate(user, date));
         return "records";
-    }
-
-    private LocalDate parseOrDefault(Optional<String> param, LocalDate defaultValue) {
-        if (!param.isPresent()) {
-            return defaultValue;
-        }
-        try {
-            return LocalDate.parse(param.get());
-        } catch (DateTimeParseException ex) {
-            return defaultValue;
-        }
-    }
-
-    private Long parseOrDefault(Optional<String> param, Long defaultValue) {
-        if (!param.isPresent()) {
-            return defaultValue;
-        }
-        try {
-            return Long.parseLong(param.get());
-        } catch (NumberFormatException ex) {
-            return defaultValue;
-        }
     }
 }
