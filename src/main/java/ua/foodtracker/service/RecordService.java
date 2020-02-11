@@ -2,8 +2,8 @@ package ua.foodtracker.service;
 
 import ua.foodtracker.domain.Record;
 import ua.foodtracker.domain.User;
-import ua.foodtracker.domain.dto.DailySums;
-import ua.foodtracker.domain.dto.HomeModel;
+import ua.foodtracker.domain.DailySums;
+import ua.foodtracker.domain.HomeModel;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,5 +21,5 @@ public interface RecordService {
 
     DailySums calculateDailySums(User user, String date);
 
-    HomeModel prepareHomeModel(User user);
+    HomeModel getHomeModel(User user);
 }

@@ -9,6 +9,7 @@ import ua.foodtracker.domain.Meal;
 import ua.foodtracker.domain.Role;
 import ua.foodtracker.domain.User;
 import ua.foodtracker.entity.MealEntity;
+import ua.foodtracker.entity.UserEntity;
 import ua.foodtracker.repository.MealRepository;
 import ua.foodtracker.service.MealService;
 import ua.foodtracker.service.exception.IncorrectDataException;
@@ -31,13 +32,13 @@ public class MealServiceImpl implements MealService {
     public Page<Meal> findAllByPage(String pageNumber) {
         if (pageNumber == null) {
             //log
-            return mealRepository.findAll(PageRequest.of(0, ITEMS_PER_PAGE)).map(mealMapper::mapToDomain);
+            return findAllByIntParam(0);
         }
         try {
-            return mealRepository.findAll(PageRequest.of(Integer.parseInt(pageNumber), ITEMS_PER_PAGE)).map(mealMapper::mapToDomain);
+            return findAllByIntParam(Integer.parseInt(pageNumber));
         } catch (NumberFormatException ex) {
             //log
-            return mealRepository.findAll(PageRequest.of(0, ITEMS_PER_PAGE)).map(mealMapper::mapToDomain);
+            return findAllByIntParam(0);
         }
     }
 
@@ -55,8 +56,7 @@ public class MealServiceImpl implements MealService {
     public void delete(String id, User user) {
         Optional<MealEntity> entity = findByStringParam(id, mealRepository::findById);
         if (entity.isPresent()) {
-            if (entity.get().getUser() == null && user.getRole() == Role.ADMIN ||
-                    entity.get().getUser() != null && entity.get().getUser().getId().equals(user.getId())) {
+            if (isAccessed(user, entity.get())) {
                 mealRepository.delete(entity.get());
                 return;
             } else {
@@ -74,5 +74,17 @@ public class MealServiceImpl implements MealService {
     @Override
     public Optional<Meal> findById(String id) {
         return findByStringParam(id, mealRepository::findById).map(mealMapper::mapToDomain);
+    }
+
+    private boolean isAccessed(User userInSession, MealEntity entity) {
+        UserEntity currentUser = entity.getUser();
+        boolean isNull = currentUser == null;
+
+        return isNull && userInSession.getRole() == Role.ADMIN ||
+                !isNull && currentUser.getId().equals(userInSession.getId());
+    }
+
+    private Page<Meal> findAllByIntParam(int i) {
+        return mealRepository.findAll(PageRequest.of(i, ITEMS_PER_PAGE)).map(mealMapper::mapToDomain);
     }
 }

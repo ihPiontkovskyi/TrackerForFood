@@ -1,4 +1,4 @@
-package ua.foodtracker.domain.dto;
+package ua.foodtracker.domain;
 
 import lombok.Builder;
 import lombok.Data;

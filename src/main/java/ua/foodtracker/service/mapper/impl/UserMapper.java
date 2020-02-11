@@ -16,9 +16,6 @@ import ua.foodtracker.service.mapper.Mapper;
 import java.time.LocalDate;
 import java.time.Period;
 
-import static org.springframework.security.crypto.bcrypt.BCrypt.gensalt;
-import static org.springframework.security.crypto.bcrypt.BCrypt.hashpw;
-
 @Component
 public class UserMapper implements Mapper<User, UserEntity> {
 
@@ -91,7 +88,7 @@ public class UserMapper implements Mapper<User, UserEntity> {
         entity.setGender(GenderEntity.valueOf(domain.getGender().name()));
         entity.setLifestyle(LifestyleEntity.valueOf(domain.getLifestyle().name()));
         entity.setId(domain.getId());
-        entity.setPassword(hashpw(domain.getPassword(), gensalt()));
+        entity.setPassword(domain.getPassword());
         entity.setRole(domain.getRole() == null ? RoleEntity.USER : RoleEntity.valueOf(domain.getRole().name()));
         entity.setWeight(domain.getWeight());
         entity.setUserGoal(buildUserGoalEntity(domain));

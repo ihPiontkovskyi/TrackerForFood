@@ -80,7 +80,8 @@
                                 <div class="stat-content">
                                     <div class="text-left dib">
                                         <div class="stat-text">
-                                            <span class="count" th:text="${homeModel.getDsto().getSumEnergy()}"></span>
+                                            <span class="count"
+                                                  th:text="${homeModel.getDailySums().getSumEnergy()}"></span>
                                             <span th:text="#{kcal.field}"></span>
                                         </div>
                                         <div class="stat-heading">
@@ -103,7 +104,8 @@
                                 <div class="stat-content">
                                     <div class="text-left dib">
                                         <div class="stat-text">
-                                            <span class="count" th:text="${homeModel.getDsto().getSumProtein()}"></span>
+                                            <span class="count"
+                                                  th:text="${homeModel.getDailySums().getSumProtein()}"></span>
                                             <span th:text="#{weight.label}"></span>
                                         </div>
                                         <div class="stat-heading">
@@ -127,7 +129,7 @@
                                     <div class="text-left dib">
                                         <div class="stat-text">
                                             <span class="count"
-                                                  th:text="${homeModel.getDsto().getSumCarbohydrates()}"></span>
+                                                  th:text="${homeModel.getDailySums().getSumCarbohydrates()}"></span>
                                             <span th:text="#{weight.label}"></span>
                                         </div>
                                         <div class="stat-heading">
@@ -150,7 +152,8 @@
                                 <div class="stat-content">
                                     <div class="text-left dib">
                                         <div class="stat-text">
-                                            <span class="count" th:text="${homeModel.getDsto().getSumWater()}"></span>
+                                            <span class="count"
+                                                  th:text="${homeModel.getDailySums().getSumWater()}"></span>
                                             <span th:text="#{volume.label}"></span>
                                         </div>
                                         <div class="stat-heading">
@@ -193,7 +196,7 @@
                                     </h4>
                                     <div class="progress mb-2" style="height: 5px;">
                                         <div class="progress-bar bg-flat-color-1" role="progressbar"
-                                             th:style="|width: ${homeModel.getDailyEnergyGoal()}%|"
+                                             th:style="|width: ${homeModel.getDailyGoal().getDailyEnergyGoal()}%|"
                                              aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </div>
@@ -203,7 +206,7 @@
                                     </h4>
                                     <div class="progress mb-2" style="height: 5px;">
                                         <div class="progress-bar bg-flat-color-2" role="progressbar"
-                                             th:style="|width: ${homeModel.getDailyWaterGoal()}%|"
+                                             th:style="|width: ${homeModel.getDailyGoal().getDailyWaterGoal()}%|"
                                              aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </div>
@@ -213,7 +216,7 @@
                                     </h4>
                                     <div class="progress mb-2" style="height: 5px;">
                                         <div class="progress-bar bg-flat-color-3" role="progressbar"
-                                             th:style="|width: ${homeModel.getDailyCarbohydratesGoal()}%|"
+                                             th:style="|width: ${homeModel.getDailyGoal().getDailyCarbohydratesGoal()}%|"
                                              aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </div>
@@ -223,7 +226,7 @@
                                     </h4>
                                     <div class="progress mb-2" style="height: 5px;">
                                         <div class="progress-bar bg-flat-color-4" role="progressbar"
-                                             th:style="|width: ${homeModel.getDailyProteinGoal()}%|"
+                                             th:style="|width: ${homeModel.getDailyGoal().getDailyProteinGoal()}%|"
                                              aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </div>
@@ -233,7 +236,7 @@
                                     </h4>
                                     <div class="progress mb-2" style="height: 5px;">
                                         <div class="progress-bar bg-flat-color-5" role="progressbar"
-                                             th:style="|width: ${homeModel.getDailyFatGoal()}%|"
+                                             th:style="|width: ${homeModel.getDailyGoal().getDailyFatGoal()}%|"
                                              aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                 </div>
@@ -255,11 +258,11 @@
     jQuery(document).ready(function ($) {
         if ($('#traffic-chart').length) {
             let labels = [[${homeModel.getLabels()}]];
-            let protein = [[${homeModel.getProteinWeeklyStat()}]];
-            let carb = [[${homeModel.getCarbWeeklyStat()}]];
-            let energy = [[${homeModel.getEnergyWeeklyStat()}]];
-            let water = [[${homeModel.getWaterWeeklyStat()}]];
-            let fat = [[${homeModel.getFatWeeklyStat()}]];
+            let protein = [[${homeModel.getWeeklyProteinStat()}]];
+            let carb = [[${homeModel.getWeeklyCarbohydrateStat()}]];
+            let energy = [[${homeModel.getWeeklyEnergyStat()}]];
+            let water = [[${homeModel.getWeeklyWaterStat()}]];
+            let fat = [[${homeModel.getWeeklyFatStat()}]];
             let chart = new Chartist.Line('#traffic-chart', {
                 labels: labels,
                 series: [

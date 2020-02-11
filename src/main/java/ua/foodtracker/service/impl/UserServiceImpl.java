@@ -13,6 +13,8 @@ import ua.foodtracker.service.mapper.impl.UserMapper;
 import java.util.Optional;
 
 import static org.springframework.security.crypto.bcrypt.BCrypt.checkpw;
+import static org.springframework.security.crypto.bcrypt.BCrypt.gensalt;
+import static org.springframework.security.crypto.bcrypt.BCrypt.hashpw;
 import static ua.foodtracker.service.utility.ServiceUtility.findByStringParam;
 
 @Service
@@ -21,7 +23,6 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-
 
     @Override
     public User login(String email, String pass) {
@@ -38,6 +39,7 @@ public class UserServiceImpl implements UserService {
             throw new IncorrectDataException("passwords.do.not.match");
         }
         if (!userRepository.existsByEmail(user.getEmail())) {
+            user.setPassword(hashpw(user.getPassword(), gensalt()));
             userRepository.save(userMapper.mapToEntity(user));
             return;
         }
