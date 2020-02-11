@@ -9,8 +9,6 @@ import ua.foodtracker.domain.Meal;
 import ua.foodtracker.domain.Record;
 import ua.foodtracker.domain.User;
 import ua.foodtracker.entity.RecordEntity;
-import ua.foodtracker.entity.RoleEntity;
-import ua.foodtracker.entity.UserEntity;
 import ua.foodtracker.repository.RecordRepository;
 import ua.foodtracker.service.RecordService;
 import ua.foodtracker.service.exception.IncorrectDataException;
@@ -34,7 +32,7 @@ public class RecordServiceImpl implements RecordService {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM");
     private static final int WEEKS_COUNT = 1;
     private static final int PERIOD = 1;
-    private static final int DAYS_COUNT = 7;
+    private static final int DAYS_COUNT = 8;
     private final RecordRepository recordRepository;
     private final RecordMapper recordMapper;
 
@@ -61,7 +59,7 @@ public class RecordServiceImpl implements RecordService {
     public void delete(String id, User user) {
         Optional<RecordEntity> entity = findByStringParam(id, recordRepository::findById);
         if (entity.isPresent()) {
-            if (isAccessed(user, entity.get())) {
+            if (entity.get().getUser().getId().equals(user.getId())) {
                 recordRepository.delete(entity.get());
                 return;
             } else {
@@ -130,6 +128,7 @@ public class RecordServiceImpl implements RecordService {
     private List<LocalDate> getWeek() {
         return Stream.iterate(LocalDate.now().minusWeeks(WEEKS_COUNT), date -> date.plusDays(PERIOD))
                 .limit(DAYS_COUNT)
+                .sorted()
                 .collect(Collectors.toList());
     }
 
@@ -137,11 +136,5 @@ public class RecordServiceImpl implements RecordService {
         return recordRepository.findAllByUserIdAndDate(user.getId(), parse).stream()
                 .map(recordMapper::mapToDomain)
                 .collect(Collectors.toList());
-    }
-
-    private boolean isAccessed(User userInSession, RecordEntity entity) {
-        UserEntity currentUser = entity.getUser();
-        return currentUser.getRole() == RoleEntity.ADMIN
-                || currentUser.getId().equals(userInSession.getId());
     }
 }

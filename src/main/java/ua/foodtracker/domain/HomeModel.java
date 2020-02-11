@@ -40,7 +40,13 @@ public class HomeModel {
     }
 
     private List<Integer> getListByFunction(Function<? super DailySums, ? extends Integer> function) {
-        return weeklyStats.values().stream().map(function).collect(Collectors.toList());
+        return weeklyStats
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByKey())
+                .map(Map.Entry::getValue)
+                .map(function)
+                .collect(Collectors.toList());
     }
 
     public static DailyGoal calculateDailyGoal(DailySums dailySums, UserGoal userGoal) {
@@ -53,17 +59,17 @@ public class HomeModel {
                 .build();
     }
 
-    private static int getPercentage(double dailySum, Integer dailyGoal) {
+    private static int getPercentage(double dailySum, int dailyGoal) {
         return Math.min((int) ((dailySum / dailyGoal) * PERCENTAGE), MAX_PERCENTAGE);
     }
 
     @Builder
     @Getter
-    private static class DailyGoal {
-        private Integer dailyEnergyGoal;
-        private Integer dailyProteinGoal;
-        private Integer dailyFatGoal;
-        private Integer dailyCarbohydratesGoal;
-        private Integer dailyWaterGoal;
+    public static class DailyGoal {
+        private int dailyEnergyGoal;
+        private int dailyProteinGoal;
+        private int dailyFatGoal;
+        private int dailyCarbohydratesGoal;
+        private int dailyWaterGoal;
     }
 }

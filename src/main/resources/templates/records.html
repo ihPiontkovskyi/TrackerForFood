@@ -243,7 +243,7 @@
                                                 <td th:text="${record.getMeal().calculateEnergy()}"></td>
                                                 <td th:text="${record.getMeal().getWeight()}"></td>
                                                 <td th:text="${record.getMeal().getWater()}"></td>
-                                                <td><a th:href="@{/records/delete(id=${record.id})}"
+                                                <td><a th:href="@{/records/delete(id=${record.id},date=${date})}"
                                                        class="btn float-right"><i
                                                         class="fa fa-minus"
                                                         aria-hidden="true"></i></a>

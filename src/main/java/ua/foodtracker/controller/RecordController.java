@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foodtracker.domain.User;
 import ua.foodtracker.service.RecordService;
 
@@ -26,9 +27,13 @@ public class RecordController {
     }
 
     @GetMapping(value = "/records/delete")
-    public String deleteRecord(@RequestParam("id") String id, @SessionAttribute("user") User user) {
+    public String deleteRecord(@RequestParam("id") String id,
+                               @SessionAttribute("user") User user,
+                               @RequestParam(value = "date", required = false) String date,
+                               RedirectAttributes attributes) {
         recordService.delete(id, user);
-        return "redirect:/records";
+        attributes.addAttribute("date", date);
+        return "redirect:";
     }
 
     @GetMapping(value = "/records")

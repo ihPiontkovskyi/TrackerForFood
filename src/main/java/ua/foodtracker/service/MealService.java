@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface MealService {
     Page<Meal> findAllByPage(String pageNumber);
 
-    long pageCount();
+    int pageCount();
 
     void add(Meal meal);
 

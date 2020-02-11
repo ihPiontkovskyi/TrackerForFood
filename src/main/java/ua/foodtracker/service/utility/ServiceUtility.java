@@ -10,8 +10,8 @@ public class ServiceUtility {
     private ServiceUtility() {
     }
 
-    public static long getNumberOfPage(long countOfRecords, long itemsPerPage) {
-        return countOfRecords % itemsPerPage == 0 ? countOfRecords / itemsPerPage : countOfRecords / itemsPerPage + 1;
+    public static int getNumberOfPage(long countOfRecords, int itemsPerPage) {
+        return countOfRecords % itemsPerPage == 0 ? (int) (countOfRecords / itemsPerPage) : (int) (countOfRecords / itemsPerPage + 1);
     }
 
     public static <E> E findByStringParam(String param, IntFunction<E> function) {

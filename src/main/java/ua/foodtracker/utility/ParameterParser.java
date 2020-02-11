@@ -19,15 +19,18 @@ public class ParameterParser {
         }
     }
 
-    public static Long parseOrDefault(String param, Long defaultValue) {
+    public static int parsePageNumber(String param, int defaultValue, int maxValue) {
         if (param == null) {
             return defaultValue;
         }
         try {
-            return Long.parseLong(param);
+            int value = Integer.parseInt(param);
+            if (value < 0 || value > maxValue) {
+                return defaultValue;
+            }
+            return value;
         } catch (NumberFormatException ex) {
             return defaultValue;
         }
     }
-
 }

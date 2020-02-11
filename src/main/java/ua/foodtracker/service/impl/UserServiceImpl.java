@@ -2,6 +2,7 @@ package ua.foodtracker.service.impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.foodtracker.domain.User;
 import ua.foodtracker.entity.UserEntity;
@@ -12,9 +13,6 @@ import ua.foodtracker.service.mapper.impl.UserMapper;
 
 import java.util.Optional;
 
-import static org.springframework.security.crypto.bcrypt.BCrypt.checkpw;
-import static org.springframework.security.crypto.bcrypt.BCrypt.gensalt;
-import static org.springframework.security.crypto.bcrypt.BCrypt.hashpw;
 import static ua.foodtracker.service.utility.ServiceUtility.findByStringParam;
 
 @Service
@@ -23,11 +21,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder encoder;
 
     @Override
     public User login(String email, String pass) {
         Optional<UserEntity> userEntity = userRepository.findByEmail(email);
-        if (userEntity.isPresent() && checkpw(pass, userEntity.get().getPassword())) {
+        if (userEntity.isPresent() && encoder.matches(pass, userEntity.get().getPassword())) {
             return userMapper.mapToDomain(userEntity.get());
         }
         throw new IncorrectDataException("incorrect.email.or.password");
@@ -39,7 +38,7 @@ public class UserServiceImpl implements UserService {
             throw new IncorrectDataException("passwords.do.not.match");
         }
         if (!userRepository.existsByEmail(user.getEmail())) {
-            user.setPassword(hashpw(user.getPassword(), gensalt()));
+            user.setPassword(encoder.encode(user.getPassword()));
             userRepository.save(userMapper.mapToEntity(user));
             return;
         }

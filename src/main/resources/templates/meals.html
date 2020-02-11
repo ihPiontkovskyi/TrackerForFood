@@ -141,15 +141,24 @@
                                                 <td th:text="${meal.calculateEnergy()}"></td>
                                                 <td th:text="${meal.getWeight()}"></td>
                                                 <td th:text="${meal.getWater()}"></td>
-                                                <td><a th:href="@{/meals/delete(id=${meal.getId()})}"
-                                                       class="btn float-right"><i
-                                                        class="fa fa-minus"
-                                                        aria-hidden="true"></i></a>
-                                                    <a th:href="@{/meals/edit(id=${meal.getId()})}"
-                                                       class="btn float-right"><i
-                                                            class="fa fa-pencil"
-                                                            aria-hidden="true"></i></a>
-                                                </td>
+                                                <div th:with="isAccessed=${session.user.getRole().name() == 'ADMIN' || meal.getUser()!=null && meal.getUser().getId().equals(session.user.getId())}">
+                                                    <th:block th:if="${isAccessed}">
+                                                        <td><a th:href="@{/meals/delete(id=${meal.getId()},page=${page})}"
+                                                               class="btn float-right"><i
+                                                                class="fa fa-minus"
+                                                                aria-hidden="true"></i></a>
+                                                            <a th:href="@{/meals/edit(id=${meal.getId()})}"
+                                                               class="btn float-right"><i
+                                                                    class="fa fa-pencil"
+                                                                    aria-hidden="true"></i></a>
+                                                        </td>
+                                                    </th:block>
+                                                    <th:block th:unless="${isAccessed}">
+                                                        <td>
+                                                            <span th:text="#{access.action}"></span>
+                                                        </td>
+                                                    </th:block>
+                                                </div>
                                         </th:block>
                                         </tbody>
                                     </table>

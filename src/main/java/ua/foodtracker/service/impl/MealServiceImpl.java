@@ -19,6 +19,7 @@ import java.util.Optional;
 
 import static ua.foodtracker.service.utility.ServiceUtility.findByStringParam;
 import static ua.foodtracker.service.utility.ServiceUtility.getNumberOfPage;
+import static ua.foodtracker.utility.ParameterParser.parsePageNumber;
 
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -30,20 +31,11 @@ public class MealServiceImpl implements MealService {
 
     @Override
     public Page<Meal> findAllByPage(String pageNumber) {
-        if (pageNumber == null) {
-            //log
-            return findAllByIntParam(0);
-        }
-        try {
-            return findAllByIntParam(Integer.parseInt(pageNumber));
-        } catch (NumberFormatException ex) {
-            //log
-            return findAllByIntParam(0);
-        }
+        return mealRepository.findAll(PageRequest.of(parsePageNumber(pageNumber, 0, pageCount()), ITEMS_PER_PAGE)).map(mealMapper::mapToDomain);
     }
 
     @Override
-    public long pageCount() {
+    public int pageCount() {
         return getNumberOfPage(mealRepository.count(), ITEMS_PER_PAGE);
     }
 
@@ -84,7 +76,4 @@ public class MealServiceImpl implements MealService {
                 !isNull && currentUser.getId().equals(userInSession.getId());
     }
 
-    private Page<Meal> findAllByIntParam(int i) {
-        return mealRepository.findAll(PageRequest.of(i, ITEMS_PER_PAGE)).map(mealMapper::mapToDomain);
-    }
 }
