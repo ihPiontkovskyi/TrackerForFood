@@ -1,4 +1,4 @@
-package ua.foodtracker.service.exception;
+package ua.foodtracker.exception;
 
 public class IncorrectDataException extends RuntimeException {
     public IncorrectDataException(String message) {

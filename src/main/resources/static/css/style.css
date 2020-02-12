@@ -579,3 +579,20 @@ aside.left-panel {
 .inline {
     display: inline;
 }
+
+html {
+    height: 100%;
+}
+
+footer.site-footer .footer-inner {
+    color: #78909c;
+    font-size: 14px;
+    position:absolute;
+    bottom:0;
+    width:84%;
+    padding: 1em 1.125em;
+}
+
+footer.site-footer .footer-inner a {
+    color: #6a7074;
+}

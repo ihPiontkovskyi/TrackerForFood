@@ -20,7 +20,7 @@ import ua.foodtracker.entity.LifestyleEntity;
 import ua.foodtracker.entity.RoleEntity;
 import ua.foodtracker.entity.UserEntity;
 import ua.foodtracker.repository.UserRepository;
-import ua.foodtracker.service.exception.IncorrectDataException;
+import ua.foodtracker.exception.IncorrectDataException;
 import ua.foodtracker.service.impl.UserServiceImpl;
 import ua.foodtracker.service.mapper.impl.UserMapper;
 

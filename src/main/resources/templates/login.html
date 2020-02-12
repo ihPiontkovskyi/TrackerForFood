@@ -47,14 +47,14 @@
                     </a>
                 </div>
             </form>
-            <div th:with="condition=${#locale=='EN_US'}">
+            <th:block th:with="condition=#{lang}=='??lang_ru??'">
                 <div th:if="${condition}" class="login-more"
-                     style="background-image:url('/images/bg-001.jpg');">
+                     style="background-image:url(/images/bg-001-ru.jpg);">
                 </div>
                 <div th:unless="${condition}" class="login-more"
-                     style="background-image:url('/images/bg-001-ru.jpg');">
+                     style="background-image:url(/images/bg-001.jpg);">
                 </div>
-            </div>
+            </th:block>
         </div>
     </div>
 </div>

@@ -9,9 +9,10 @@ import ua.foodtracker.domain.Meal;
 import ua.foodtracker.domain.Record;
 import ua.foodtracker.domain.User;
 import ua.foodtracker.entity.RecordEntity;
+import ua.foodtracker.exception.AccessDeniedException;
 import ua.foodtracker.repository.RecordRepository;
 import ua.foodtracker.service.RecordService;
-import ua.foodtracker.service.exception.IncorrectDataException;
+import ua.foodtracker.exception.IncorrectDataException;
 import ua.foodtracker.service.mapper.impl.RecordMapper;
 
 import java.time.LocalDate;
@@ -63,7 +64,7 @@ public class RecordServiceImpl implements RecordService {
                 recordRepository.delete(entity.get());
                 return;
             } else {
-                throw new IncorrectDataException("access.denied");
+                throw new AccessDeniedException("access.denied");
             }
         }
         throw new IncorrectDataException("incorrect.data");

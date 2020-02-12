@@ -10,11 +10,11 @@
     <link th:href="@{/css/register.css}" rel="stylesheet" media="all">
 </head>
 
-<body>
-<div class="page-wrapper bg-gra-02 p-t-130 p-b-100 font-poppins">
+<body class="bg-gra-02">
+<div class="page-wrapper p-t-40 font-poppins">
     <div class="lang-block">
-        <a href="?lang=en">EN</a>
-        <a href="?lang=ru">RU</a>
+        <a th:href="@{/register(lang=en)}">EN</a>
+        <a th:href="@{/register(lang=ru)}">RU</a>
     </div>
     <div class="wrapper wrapper--w680">
         <div class="card card-4">
@@ -168,11 +168,12 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-<script>
+<script th:inline="javascript">
     (function ($) {
         'use strict';
         let locale_lang;
-        if ("ru" === "${param.lang}") {
+        let currentLang = [[#{lang}]];
+        if ("??lang_ru??" === currentLang) {
             locale_lang = {
                 format: 'YYYY-MM-DD',
                 "daysOfWeek": [

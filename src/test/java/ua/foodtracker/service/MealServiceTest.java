@@ -21,10 +21,11 @@ import ua.foodtracker.entity.LifestyleEntity;
 import ua.foodtracker.entity.MealEntity;
 import ua.foodtracker.entity.RoleEntity;
 import ua.foodtracker.entity.UserEntity;
+import ua.foodtracker.exception.AccessDeniedException;
+import ua.foodtracker.exception.IncorrectDataException;
 import ua.foodtracker.repository.MealRepository;
-import ua.foodtracker.service.exception.IncorrectDataException;
 import ua.foodtracker.service.impl.MealServiceImpl;
-import ua.foodtracker.service.mapper.impl.MealMapper;
+import ua.foodtracker.service.mapper.Mapper;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -32,6 +33,7 @@ import java.util.Optional;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -50,7 +52,7 @@ public class MealServiceTest {
     @Mock
     private MealRepository repository;
     @Mock
-    private MealMapper mapper;
+    private Mapper<Meal, MealEntity> mapper;
 
     @InjectMocks
     private MealServiceImpl service;
@@ -65,13 +67,14 @@ public class MealServiceTest {
 
     @Test
     public void findPageShouldReturnEmptyPage() {
-        when(repository.findAll(PageRequest.of(1, 3))).thenReturn(Page.empty());
+        when(repository.findAll(PageRequest.of(0, 3))).thenReturn(Page.empty());
         when(repository.count()).thenReturn(10L);
+        when(mapper.mapToDomain(any())).thenReturn(MEAL);
 
         Page<Meal> meals = service.findAllByPage("1");
 
         assertThat(meals, equalTo(Page.empty()));
-        verify(repository).findAll(PageRequest.of(1, 3));
+        verify(repository).findAll(PageRequest.of(0, 3));
         verify(repository).count();
         verifyNoInteractions(mapper);
     }
@@ -168,7 +171,7 @@ public class MealServiceTest {
     public void deleteShouldThrowIncorrectDataException() {
         when(repository.findById(MEAL.getId())).thenReturn(Optional.of(MEAL_ENTITY));
 
-        exception.expect(IncorrectDataException.class);
+        exception.expect(AccessDeniedException.class);
         exception.expectMessage("access.denied");
         service.delete(MEAL.getId().toString(), USER);
 
@@ -204,7 +207,7 @@ public class MealServiceTest {
     public void deleteShouldThrowIncorrectDataExceptionCase5() {
         when(repository.findById(MEAL.getId())).thenReturn(Optional.of(MEAL_ENTITY_WITH_USER));
 
-        exception.expect(IncorrectDataException.class);
+        exception.expect(AccessDeniedException.class);
         exception.expectMessage("access.denied");
         service.delete(MEAL_WITH_USER.getId().toString(), USER);
 
@@ -248,29 +251,29 @@ public class MealServiceTest {
     }
 
     private static Meal getMeal() {
-        return Meal.builder()
-                .carbohydrate(10)
-                .fat(10)
-                .id(1)
-                .name("name")
-                .protein(10)
-                .user(null)
-                .water(10)
-                .weight(100)
-                .build();
+        Meal meal = new Meal();
+        meal.setCarbohydrate(10);
+        meal.setFat(10);
+        meal.setId(1);
+        meal.setName("name");
+        meal.setProtein(10);
+        meal.setWater(10);
+        meal.setWeight(10);
+        meal.setUser(null);
+        return meal;
     }
 
     private static Meal getMealWithUser() {
-        return Meal.builder()
-                .carbohydrate(10)
-                .fat(10)
-                .id(1)
-                .name("name")
-                .protein(10)
-                .user(USER)
-                .water(10)
-                .weight(100)
-                .build();
+        Meal meal = new Meal();
+        meal.setCarbohydrate(10);
+        meal.setFat(10);
+        meal.setId(1);
+        meal.setName("name");
+        meal.setProtein(10);
+        meal.setWater(10);
+        meal.setWeight(10);
+        meal.setUser(USER);
+        return meal;
     }
 
     private static MealEntity getMealEntity() {

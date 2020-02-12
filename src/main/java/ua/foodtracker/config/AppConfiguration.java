@@ -25,11 +25,6 @@ public class AppConfiguration implements WebMvcConfigurer {
         return localeChangeInterceptor;
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeChangeInterceptor());
@@ -40,4 +35,8 @@ public class AppConfiguration implements WebMvcConfigurer {
         registry.addResourceHandler("/static/**").addResourceLocations("/static/");
     }
 
+    @Bean
+    public PasswordEncoder encoder() {
+        return new BCryptPasswordEncoder(11);
+    }
 }

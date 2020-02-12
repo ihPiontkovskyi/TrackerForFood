@@ -1,0 +1,161 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Food Tracker</title>
+    <link rel="icon" type="image/png" th:href="@{/static/images/logo-002.png}"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link th:href="@{/css/form.css}" rel="stylesheet" media="all">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/pixeden-stroke-7-icon@1.2.3/pe-icon-7-stroke/dist/pe-icon-7-stroke.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/chartist@0.11.0/dist/chartist.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gra-02">
+<aside id="left-panel" class="left-panel">
+    <nav class="navbar navbar-expand-sm navbar-default">
+        <div id="main-menu" class="main-menu collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a th:href="@{/home}">
+                        <em class="menu-icon fa fa-bar-chart"></em>
+                        <span th:text="#{highlights.btn}"></span></a>
+                </li>
+                <li>
+                    <a th:href="@{/records}"> <em class="menu-icon fa fa-calendar"></em>
+                        <span th:text="#{diary.btn}"></span>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/meals}"> <em class="menu-icon fa fa-cutlery"></em>
+                        <span th:text="#{meals.btn}"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</aside>
+<div id="right-panel" class="right-panel">
+    <header id="header" class="header">
+        <div class="top-left">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="home"><img th:src="@{/images/logo-001.png}" alt="Logo"></a>
+            </div>
+        </div>
+        <div class="top-right">
+            <div class="header-menu">
+                <div class="user-area dropdown float-right">
+                    <a href="#" class="dropdown-toggle active" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">
+                        <em class="fa fa-user-circle"></em>
+                    </a>
+
+                    <div class="user-menu dropdown-menu">
+                        <a class="nav-link" href="settings"><em class="fa fa -cog"></em>
+                            <span th:text="#{profile.btn}"></span>
+                        </a>
+
+                        <a class="nav-link" href="logout"><em class="fa fa-power -off"></em>
+                            <span th:text="#{logout.btn}"></span>
+                        </a>
+                    </div>
+                </div>
+                <div class="lang-block">
+                    <a th:href="@{/meals/add(lang='en')}">EN</a>
+                    <a th:href="@{/meals/add(lang='ru')}">RU</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="content">
+        <div class="wrapper wrapper--w680">
+            <div class="card card-4">
+                <div class="card-body">
+                    <h2 class="title" th:text="#{add.meal.label}">
+                    </h2>
+                    <form th:action="@{/meals/add}" method="POST" th:object="${meal}">
+                        <div class="row row-space">
+                            <div class="col-6">
+                                <div class="input-group">
+                                    <label class="label">
+                                        <input class="input--style-4" th:placeholder="#{meal.name}" type="text"
+                                               name="first_name" th:field="*{name}">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="input-group">
+                                    <label class="label">
+                                        <input class="input--style-4" th:placeholder="#{weight.column.label}"
+                                               type="number"
+                                               name="weight" th:field="*{weight}">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-space">
+                            <div class="col-6">
+                                <div class="input-group">
+                                    <label class="label">
+                                        <input class="input--style-4"
+                                               th:placeholder="#{protein.label}+', '+#{weight.label}" type="number"
+                                               name="height" th:field="*{protein}">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="input-group">
+                                    <label class="label">
+                                        <input class="input--style-4"
+                                               th:placeholder="#{water.label}+', '+#{volume.label}" type="number"
+                                               name="weight" th:field="*{water}">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-space">
+                            <div class="col-6">
+                                <div class="input-group">
+                                    <label class="label">
+                                        <input class="input--style-4"
+                                               th:placeholder="#{carbohydrate.label}+', '+#{weight.label}" type="number"
+                                               name="weight" th:field="*{carbohydrate}">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="input-group">
+                                    <label class="label">
+                                        <input class="input--style-4" th:placeholder="#{fat.label}+', '+#{weight.label}"
+                                               type="number"
+                                               name="height" th:field="*{fat}">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-t-15">
+                            <button class="btn btn--radius-2 btn--blue" type="submit" th:text="#{add.btn}">
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="site-footer">
+        <div class="footer-inner bg-white">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    Made by <a href="https://github.com/ihPiontkovskyi/">Ihor Piontkovskyi</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script src="https://use.fontawesome.com/59810e450d.js"></script>
+</body>
+</html>

@@ -8,7 +8,7 @@ import ua.foodtracker.domain.User;
 import ua.foodtracker.entity.UserEntity;
 import ua.foodtracker.repository.UserRepository;
 import ua.foodtracker.service.UserService;
-import ua.foodtracker.service.exception.IncorrectDataException;
+import ua.foodtracker.exception.IncorrectDataException;
 import ua.foodtracker.service.mapper.impl.UserMapper;
 
 import java.util.Optional;

@@ -24,8 +24,9 @@ import ua.foodtracker.entity.MealEntity;
 import ua.foodtracker.entity.RecordEntity;
 import ua.foodtracker.entity.RoleEntity;
 import ua.foodtracker.entity.UserEntity;
+import ua.foodtracker.exception.AccessDeniedException;
 import ua.foodtracker.repository.RecordRepository;
-import ua.foodtracker.service.exception.IncorrectDataException;
+import ua.foodtracker.exception.IncorrectDataException;
 import ua.foodtracker.service.impl.RecordServiceImpl;
 import ua.foodtracker.service.mapper.impl.RecordMapper;
 
@@ -105,7 +106,7 @@ public class RecordServiceTest {
     public void deleteShouldThrowIncorrectDataException() {
         when(repository.findById(RECORD.getId())).thenReturn(Optional.of(RECORD_ENTITY));
 
-        exception.expect(IncorrectDataException.class);
+        exception.expect(AccessDeniedException.class);
         exception.expectMessage("access.denied");
         service.delete(RECORD.getId().toString(), getUserWithAnotherId());
 
@@ -260,20 +261,20 @@ public class RecordServiceTest {
         assertThat(model.getWeeklyProteinStat(), hasItems(0, 10));
         assertThat(model.getWeeklyWaterStat(), hasItems(0, 10));
         verify(repository, times(9)).findAllByUserIdAndDate(anyInt(), any());
-        verify(mapper,times(2)).mapToDomain(RECORD_ENTITY);
+        verify(mapper, times(2)).mapToDomain(RECORD_ENTITY);
     }
 
     private static Meal getMeal() {
-        return Meal.builder()
-                .carbohydrate(10)
-                .fat(10)
-                .id(1)
-                .name("name")
-                .protein(10)
-                .user(null)
-                .water(10)
-                .weight(100)
-                .build();
+        Meal meal = new Meal();
+        meal.setCarbohydrate(10);
+        meal.setFat(10);
+        meal.setId(1);
+        meal.setName("name");
+        meal.setProtein(10);
+        meal.setWater(10);
+        meal.setWeight(10);
+        meal.setUser(null);
+        return meal;
     }
 
     private static MealEntity getMealEntity() {

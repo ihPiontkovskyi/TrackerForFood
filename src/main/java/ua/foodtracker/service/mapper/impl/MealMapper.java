@@ -18,16 +18,16 @@ public class MealMapper implements Mapper<Meal, MealEntity> {
 
     @Override
     public Meal mapToDomain(MealEntity entity) {
-        return Meal.builder()
-                .carbohydrate(entity.getCarbohydrate())
-                .fat(entity.getFat())
-                .id(entity.getId())
-                .name(entity.getName())
-                .protein(entity.getProtein())
-                .user(userMapper.mapToDomain(entity.getUser()))
-                .water(entity.getWater())
-                .weight(entity.getWeight())
-                .build();
+        Meal meal = new Meal();
+        meal.setCarbohydrate(entity.getCarbohydrate());
+        meal.setFat(entity.getFat());
+        meal.setId(entity.getId());
+        meal.setName(entity.getName());
+        meal.setProtein(entity.getProtein());
+        meal.setWater(entity.getWater());
+        meal.setWeight(entity.getProtein());
+        meal.setUser(userMapper.mapToDomain(entity.getUser()));
+        return meal;
     }
 
     @Override

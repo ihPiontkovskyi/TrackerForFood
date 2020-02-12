@@ -10,13 +10,16 @@ import ua.foodtracker.domain.Role;
 import ua.foodtracker.domain.User;
 import ua.foodtracker.entity.MealEntity;
 import ua.foodtracker.entity.UserEntity;
+import ua.foodtracker.exception.AccessDeniedException;
+import ua.foodtracker.exception.IncorrectDataException;
 import ua.foodtracker.repository.MealRepository;
 import ua.foodtracker.service.MealService;
-import ua.foodtracker.service.exception.IncorrectDataException;
-import ua.foodtracker.service.mapper.impl.MealMapper;
+import ua.foodtracker.service.mapper.Mapper;
 
 import java.util.Optional;
 
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 import static ua.foodtracker.service.utility.ServiceUtility.findByStringParam;
 import static ua.foodtracker.service.utility.ServiceUtility.getNumberOfPage;
 import static ua.foodtracker.utility.ParameterParser.parsePageNumber;
@@ -27,11 +30,13 @@ public class MealServiceImpl implements MealService {
     private static final int ITEMS_PER_PAGE = 3;
 
     private final MealRepository mealRepository;
-    private final MealMapper mealMapper;
+    private final Mapper<Meal, MealEntity> mealMapper;
 
     @Override
     public Page<Meal> findAllByPage(String pageNumber) {
-        return mealRepository.findAll(PageRequest.of(parsePageNumber(pageNumber, 0, pageCount()), ITEMS_PER_PAGE)).map(mealMapper::mapToDomain);
+        PageRequest request = PageRequest.of(parsePageNumber(pageNumber, 0, pageCount()), ITEMS_PER_PAGE);
+        return mealRepository.findAll(request)
+                .map(mealMapper::mapToDomain);
     }
 
     @Override
@@ -46,16 +51,13 @@ public class MealServiceImpl implements MealService {
 
     @Override
     public void delete(String id, User user) {
-        Optional<MealEntity> entity = findByStringParam(id, mealRepository::findById);
-        if (entity.isPresent()) {
-            if (isAccessed(user, entity.get())) {
-                mealRepository.delete(entity.get());
-                return;
-            } else {
-                throw new IncorrectDataException("access.denied");
-            }
+        MealEntity entity = findByStringParam(id, mealRepository::findById)
+                .orElseThrow(() -> new IncorrectDataException("incorrect.data"));
+        if (isAccessed(user, entity)) {
+            mealRepository.delete(entity);
+        } else {
+            throw new AccessDeniedException("access.denied");
         }
-        throw new IncorrectDataException("incorrect.data");
     }
 
     @Override
@@ -70,10 +72,8 @@ public class MealServiceImpl implements MealService {
 
     private boolean isAccessed(User userInSession, MealEntity entity) {
         UserEntity currentUser = entity.getUser();
-        boolean isNull = currentUser == null;
 
-        return isNull && userInSession.getRole() == Role.ADMIN ||
-                !isNull && currentUser.getId().equals(userInSession.getId());
+        return isNull(currentUser) && userInSession.getRole() == Role.ADMIN ||
+                nonNull(currentUser) && currentUser.getId().equals(userInSession.getId());
     }
-
 }

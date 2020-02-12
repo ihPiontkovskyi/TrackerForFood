@@ -24,9 +24,12 @@ public class ParameterParser {
             return defaultValue;
         }
         try {
-            int value = Integer.parseInt(param);
-            if (value < 0 || value > maxValue) {
-                return defaultValue;
+            int value = Integer.parseInt(param) - 1;
+            if (value <= 0) {
+                return 0;
+            }
+            if (value >= maxValue) {
+                return maxValue - 1;
             }
             return value;
         } catch (NumberFormatException ex) {

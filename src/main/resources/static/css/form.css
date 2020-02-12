@@ -67,8 +67,8 @@ body {
     background-image: linear-gradient(179.1deg, rgba(247, 238, 238, 1) -1.9%, rgba(247, 202, 201, 1) 44.9%, rgba(145, 168, 208, 1) 96.1%);
 }
 
-.p-t-40 {
-    padding-top: 40px;
+.p-t-130 {
+    padding-top: 130px;
 }
 
 .p-t-15 {
@@ -147,38 +147,6 @@ input[type="date" i] {
     font-size: 14px;
     font-family: "Roboto", "Arial", "Helvetica Neue", sans-serif;
     font-weight: 400;
-}
-
-.daterangepicker td {
-    width: 40px;
-    height: 30px;
-}
-
-.daterangepicker {
-    -webkit-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
-    -moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
-    box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
-    display: none;
-    border: 1px solid #e0e0e0;
-    margin-top: 5px;
-}
-
-.daterangepicker::after, .daterangepicker::before {
-    display: none;
-}
-
-.daterangepicker thead tr th {
-    padding: 10px 0;
-}
-
-.daterangepicker .table-condensed th select {
-    border: 1px solid #ccc;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-    font-size: 14px;
-    padding: 5px;
-    outline: none;
 }
 
 input {
@@ -311,93 +279,6 @@ input {
     cursor: pointer;
 }
 
-.rs-select2 .select2-container {
-    width: 100% !important;
-    outline: none;
-    background: #fafafa;
-    -webkit-box-shadow: inset 0 1px 3px 0 rgba(0, 0, 0, 0.08);
-    -moz-box-shadow: inset 0 1px 3px 0 rgba(0, 0, 0, 0.08);
-    box-shadow: inset 0 1px 3px 0 rgba(0, 0, 0, 0.08);
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-}
-
-.rs-select2 .select2-container .select2-selection--single {
-    outline: none;
-    border: none;
-    height: 50px;
-    background: transparent;
-}
-
-.rs-select2 .select2-container .select2-selection--single .select2-selection__rendered {
-    line-height: 50px;
-    color: #555;
-    font-size: 16px;
-    font-family: inherit;
-    padding-left: 22px;
-    padding-right: 50px;
-}
-
-.rs-select2 .select2-container .select2-selection--single .select2-selection__arrow {
-    height: 50px;
-    right: 20px;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-pack: center;
-    -webkit-justify-content: center;
-    -moz-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-    -moz-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-}
-
-.rs-select2 .select2-container .select2-selection--single .select2-selection__arrow b {
-    display: none;
-}
-
-.rs-select2 .select2-container .select2-selection--single .select2-selection__arrow:after {
-    font-family: "Material-Design-Iconic-Font", sans-serif;
-    content: '\f2f9';
-    font-size: 24px;
-    color: #999;
-    -webkit-transition: all 0.4s ease;
-    -o-transition: all 0.4s ease;
-    -moz-transition: all 0.4s ease;
-    transition: all 0.4s ease;
-}
-
-.rs-select2 .select2-container.select2-container--open .select2-selection--single .select2-selection__arrow::after {
-    -webkit-transform: rotate(-180deg);
-    -moz-transform: rotate(-180deg);
-    -ms-transform: rotate(-180deg);
-    -o-transform: rotate(-180deg);
-    transform: rotate(-180deg);
-}
-
-.select2-container--open .select2-dropdown--below {
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-    -webkit-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
-    -moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
-    box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
-    border: 1px solid #e0e0e0;
-    margin-top: 5px;
-    overflow: hidden;
-}
-
-.select2-container--default .select2-results__option {
-    padding-left: 22px;
-}
-
 .title {
     font-size: 24px;
     color: #525252;
@@ -430,17 +311,4 @@ input {
     .card-4 .card-body {
         padding: 50px 40px;
     }
-}
-
-.lang-block{
-    position: absolute;
-    right: 2px;
-    top: 2px;
-}
-.lang-block a:link a:visited{
-    color: white;
-    padding: 14px 25px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
 }
