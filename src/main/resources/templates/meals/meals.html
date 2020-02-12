@@ -26,7 +26,7 @@
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/}"> <em class="menu-icon fa fa-cutlery"></em>
+                    <a th:href="@{/meals}"> <em class="menu-icon fa fa-cutlery"></em>
                         <span th:text="#{meals.btn}"></span>
                     </a>
                 </li>
@@ -54,7 +54,7 @@
                             <span th:text="#{profile.btn}"></span>
                         </a>
 
-                        <a class="nav-link" href="logout"><em class="fa fa-power -off"></em>
+                        <a class="nav-link" th:href="@{/logout}"><em class="fa fa-power -off"></em>
                             <span th:text="#{logout.btn}"></span>
                         </a>
                     </div>
@@ -142,7 +142,7 @@
                                                 <td th:text="${meal.calculateEnergy()}"></td>
                                                 <td th:text="${meal.getWeight()}"></td>
                                                 <td th:text="${meal.getWater()}"></td>
-                                                <div th:with="isAccessed=${session.user.getRole().name() == 'ADMIN' || meal.getUser()!=null && meal.getUser().getId().equals(session.user.getId())}">
+                                                <div th:with="isAccessed=${user.getRole().name() == 'ADMIN' || meal.getUser()!=null && meal.getUser().getId().equals(user.getId())}">
                                                     <th:block th:if="${isAccessed}">
                                                         <td>
                                                             <a th:href="@{/meals/delete(id=${meal.getId()},page=${page+1})}"

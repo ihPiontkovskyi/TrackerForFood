@@ -10,9 +10,9 @@ import ua.foodtracker.domain.Record;
 import ua.foodtracker.domain.User;
 import ua.foodtracker.entity.RecordEntity;
 import ua.foodtracker.exception.AccessDeniedException;
+import ua.foodtracker.exception.IncorrectDataException;
 import ua.foodtracker.repository.RecordRepository;
 import ua.foodtracker.service.RecordService;
-import ua.foodtracker.exception.IncorrectDataException;
 import ua.foodtracker.service.mapper.impl.RecordMapper;
 
 import java.time.LocalDate;
@@ -40,13 +40,11 @@ public class RecordServiceImpl implements RecordService {
     @Override
     public List<Record> getRecordsByDate(User user, String date) {
         if (date == null) {
-            //log
             return getRecordsByDate(user, LocalDate.now());
         }
         try {
             return getRecordsByDate(user, LocalDate.parse(date));
         } catch (DateTimeParseException ex) {
-            //log
             return getRecordsByDate(user, LocalDate.now());
         }
     }
@@ -58,16 +56,13 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public void delete(String id, User user) {
-        Optional<RecordEntity> entity = findByStringParam(id, recordRepository::findById);
-        if (entity.isPresent()) {
-            if (entity.get().getUser().getId().equals(user.getId())) {
-                recordRepository.delete(entity.get());
-                return;
-            } else {
-                throw new AccessDeniedException("access.denied");
-            }
+        RecordEntity entity = findByStringParam(id, recordRepository::findById)
+                .orElseThrow(() -> new IncorrectDataException("incorrect.data"));
+        if (entity.getUser().getId().equals(user.getId())) {
+            recordRepository.delete(entity);
+        } else {
+            throw new AccessDeniedException("access.denied");
         }
-        throw new IncorrectDataException("incorrect.data");
     }
 
     @Override

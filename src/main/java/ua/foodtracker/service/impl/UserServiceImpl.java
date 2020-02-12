@@ -6,9 +6,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.foodtracker.domain.User;
 import ua.foodtracker.entity.UserEntity;
+import ua.foodtracker.exception.IncorrectDataException;
 import ua.foodtracker.repository.UserRepository;
 import ua.foodtracker.service.UserService;
-import ua.foodtracker.exception.IncorrectDataException;
 import ua.foodtracker.service.mapper.impl.UserMapper;
 
 import java.util.Optional;
@@ -22,15 +22,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder encoder;
-
-    @Override
-    public User login(String email, String pass) {
-        Optional<UserEntity> userEntity = userRepository.findByEmail(email);
-        if (userEntity.isPresent() && encoder.matches(pass, userEntity.get().getPassword())) {
-            return userMapper.mapToDomain(userEntity.get());
-        }
-        throw new IncorrectDataException("incorrect.email.or.password");
-    }
 
     @Override
     public void register(User user) {
@@ -53,6 +44,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> findById(String id) {
         return findByStringParam(id, userRepository::findById).map(userMapper::mapToDomain);
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .map(userMapper::mapToDomain);
     }
 
     @Override

@@ -3,8 +3,9 @@ package ua.foodtracker.service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.foodtracker.domain.User;
 
+import java.util.Optional;
+
 public interface UserService {
-    User login(String email, String pass);
 
     @Transactional
     void register(User user);
@@ -12,7 +13,9 @@ public interface UserService {
     @Transactional
     void modify(User user);
 
-    Object findById(String id);
+    Optional<User> findById(String id);
+
+    Optional<User> findByEmail(String email);
 
     void delete(User user);
 }

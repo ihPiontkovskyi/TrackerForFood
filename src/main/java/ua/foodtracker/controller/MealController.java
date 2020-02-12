@@ -14,15 +14,19 @@ import ua.foodtracker.domain.Meal;
 import ua.foodtracker.domain.Role;
 import ua.foodtracker.domain.User;
 import ua.foodtracker.exception.AccessDeniedException;
-import ua.foodtracker.service.MealService;
 import ua.foodtracker.exception.IncorrectDataException;
+import ua.foodtracker.service.MealService;
+import ua.foodtracker.service.UserService;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
+import static ua.foodtracker.controller.ControllerHelper.getUserAuthorities;
+import static ua.foodtracker.controller.ControllerHelper.getUserFromSecurityContext;
+import static ua.foodtracker.controller.ControllerHelper.isAdminAccessed;
+import static ua.foodtracker.controller.ControllerHelper.isUserAccessed;
 import static ua.foodtracker.utility.ParameterParser.parsePageNumber;
 
 @Controller
@@ -31,6 +35,7 @@ public class MealController {
 
     public static final String REDIRECT = "redirect:";
     private final MealService mealService;
+    private final UserService userService;
 
     @GetMapping(value = "/meals")
     public String mealPage(Model model, @RequestParam(value = "page", required = false) String page) {
@@ -44,15 +49,15 @@ public class MealController {
         }
         model.addAttribute("page", parsePageNumber(page, 0, totalPages));
         model.addAttribute("meals", mealService.findAllByPage(page));
+        model.addAttribute("user", getUserFromSecurityContext(userService));
         return "meals/meals";
     }
 
     @GetMapping(value = "/meals/delete")
     public String deleteMeal(@RequestParam(value = "id", required = false) String id,
-                             @SessionAttribute("user") User user,
                              @RequestParam(value = "page", required = false) String page,
                              RedirectAttributes attributes) {
-        mealService.delete(id, user);
+        mealService.delete(id, getUserFromSecurityContext(userService));
         attributes.addAttribute("page", page);
         return REDIRECT;
     }
@@ -64,25 +69,22 @@ public class MealController {
     }
 
     @PostMapping(value = "/meals/add")
-    public String addMeal(@ModelAttribute @Valid Meal meal, @SessionAttribute("user") User user) {
-        meal.setUser(user.getRole() == Role.ADMIN ? null : user);
+    public String addMeal(@ModelAttribute @Valid Meal meal) {
+        meal.setUser(getUserAuthorities().contains("ADMIN") ? null : getUserFromSecurityContext(userService));
         mealService.add(meal);
         return REDIRECT;
     }
 
     @GetMapping(value = "/meals/edit")
-    public String editMeal(Model model, @RequestParam(required = false) String id, @SessionAttribute("user") User user) {
-        Optional<Meal> item = mealService.findById(id);
-        if (item.isPresent()) {
-            User createdBy = item.get().getUser();
-            if (isAdminAccessed(user, createdBy) ||
-                    isUserAccessed(user, createdBy)) {
-                model.addAttribute("meal", item.get());
-            } else {
-                throw new AccessDeniedException("access.denied");
-            }
+    public String editMeal(Model model, @RequestParam(required = false) String id) {
+        Meal item = mealService.findById(id)
+                .orElseThrow(() -> new IncorrectDataException("incorrect.data"));
+
+        if (isAdminAccessed(item) ||
+                isUserAccessed(item, getUserFromSecurityContext(userService))) {
+            model.addAttribute("meal", item);
         } else {
-            throw new IncorrectDataException("incorrect.data");
+            throw new AccessDeniedException("access.denied");
         }
         return "meals/edit";
     }
@@ -92,13 +94,5 @@ public class MealController {
         meal.setUser(user.getRole() == Role.ADMIN ? null : user);
         mealService.modify(meal);
         return REDIRECT;
-    }
-
-    private boolean isUserAccessed(User currentUser, User createdBy) {
-        return createdBy != null && createdBy.getId().equals(currentUser.getId());
-    }
-
-    private boolean isAdminAccessed(User currentUser, User createdBy) {
-        return createdBy == null && currentUser.getRole() == Role.ADMIN;
     }
 }

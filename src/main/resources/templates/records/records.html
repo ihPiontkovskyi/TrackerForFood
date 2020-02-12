@@ -21,7 +21,7 @@
                         <span th:text="#{highlights.btn}"></span></a>
                 </li>
                 <li>
-                    <a th:href="@{/}"> <em class="menu-icon fa fa-calendar"></em>
+                    <a th:href="@{/records}"> <em class="menu-icon fa fa-calendar"></em>
                         <span th:text="#{diary.btn}"></span>
                     </a>
                 </li>
@@ -54,7 +54,7 @@
                             <span th:text="#{profile.btn}"></span>
                         </a>
 
-                        <a class="nav-link" href="logout"><em class="fa fa-power -off"></em>
+                        <a class="nav-link" th:href="@{/logout}"><em class="fa fa-power -off"></em>
                             <span th:text="#{logout.btn}"></span>
                         </a>
                     </div>

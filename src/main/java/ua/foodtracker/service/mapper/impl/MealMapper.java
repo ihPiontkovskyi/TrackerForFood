@@ -18,7 +18,7 @@ public class MealMapper implements Mapper<Meal, MealEntity> {
 
     @Override
     public Meal mapToDomain(MealEntity entity) {
-        Meal meal = new Meal();
+            Meal meal = new Meal();
         meal.setCarbohydrate(entity.getCarbohydrate());
         meal.setFat(entity.getFat());
         meal.setId(entity.getId());

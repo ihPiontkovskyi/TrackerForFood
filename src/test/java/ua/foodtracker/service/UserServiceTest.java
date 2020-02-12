@@ -91,44 +91,6 @@ public class UserServiceTest {
     }
 
     @Test
-    public void loginShouldReturnUserSuccessfully() {
-        when(repository.findByEmail(getUser().getEmail())).thenReturn(Optional.of(USER_ENTITY));
-        when(encoder.matches(eq(getUser().getPassword()), anyString())).thenReturn(true);
-        when(mapper.mapToDomain(USER_ENTITY)).thenReturn(getUser());
-
-        User user = service.login(getUser().getEmail(), getUser().getPassword());
-
-        assertThat(user, is(getUser()));
-        verify(repository).findByEmail(getUser().getEmail());
-        verify(mapper).mapToDomain(USER_ENTITY);
-        verify(encoder).matches(anyString(), anyString());
-    }
-
-    @Test
-    public void loginShouldThrowIncorrectDataException() {
-        when(repository.findByEmail(getUser().getEmail())).thenReturn(Optional.of(USER_ENTITY));
-        when(encoder.matches(eq(getUser().getPassword()), anyString())).thenReturn(false);
-
-        exception.expect(IncorrectDataException.class);
-        exception.expectMessage("incorrect.email.or.password");
-        service.login(getUser().getEmail(), getUser().getPassword());
-
-        verify(repository).findByEmail(getUser().getEmail());
-        verify(encoder).matches(anyString(), anyString());
-    }
-
-    @Test
-    public void loginShouldThrowIncorrectDataExceptionCase2() {
-        when(repository.findByEmail(getUser().getEmail())).thenReturn(Optional.empty());
-
-        exception.expect(IncorrectDataException.class);
-        exception.expectMessage("incorrect.email.or.password");
-        service.login(getUser().getEmail(), getUser().getPassword());
-
-        verify(repository).findByEmail(getUser().getEmail());
-    }
-
-    @Test
     public void modifyShouldEndSuccessfully() {
         when(repository.save(USER_ENTITY)).thenReturn(USER_ENTITY);
         when(mapper.mapToEntity(USER)).thenReturn(USER_ENTITY);
