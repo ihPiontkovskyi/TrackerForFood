@@ -46,6 +46,6 @@ public class RecordController {
         model.addAttribute("date", parseOrDefault(date, LocalDate.now()));
         model.addAttribute("dailySums", recordService.calculateDailySums(user, date));
         model.addAttribute("records", recordService.getRecordsByDate(user, date));
-        return "records/records";
+        return "record/records";
     }
 }

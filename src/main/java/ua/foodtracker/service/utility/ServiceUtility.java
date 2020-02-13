@@ -1,9 +1,16 @@
 package ua.foodtracker.service.utility;
 
 import lombok.experimental.UtilityClass;
+import ua.foodtracker.domain.Role;
+import ua.foodtracker.domain.User;
+import ua.foodtracker.entity.MealEntity;
+import ua.foodtracker.entity.UserEntity;
 import ua.foodtracker.exception.IncorrectDataException;
 
 import java.util.function.IntFunction;
+
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 @UtilityClass
 public class ServiceUtility {
@@ -22,5 +29,12 @@ public class ServiceUtility {
         } catch (NumberFormatException ex) {
             throw new IncorrectDataException(INCORRECT_DATA);
         }
+    }
+
+    public static boolean isAccessed(User userInSession, MealEntity entity) {
+        UserEntity currentUser = entity.getUser();
+
+        return isNull(currentUser) && userInSession.getRole() == Role.ADMIN ||
+                nonNull(currentUser) && currentUser.getId().equals(userInSession.getId());
     }
 }

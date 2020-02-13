@@ -7,7 +7,6 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,6 +34,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -49,6 +49,9 @@ public class MealServiceTest {
     private static final User ADMIN = getAdmin();
     private static final User USER = getUser();
 
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
+
     @Mock
     private MealRepository repository;
     @Mock
@@ -57,12 +60,9 @@ public class MealServiceTest {
     @InjectMocks
     private MealServiceImpl service;
 
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-
     @After
-    public void reset() {
-        Mockito.reset(repository, mapper);
+    public void resetMocks() {
+        reset(repository, mapper);
     }
 
     @Test
@@ -124,14 +124,10 @@ public class MealServiceTest {
     }
 
     @Test
-    public void addShouldEndSuccessfully() {
-        when(repository.save(MEAL_ENTITY)).thenReturn(MEAL_ENTITY);
-        when(mapper.mapToEntity(MEAL)).thenReturn(MEAL_ENTITY);
-
+    public void addShouldThrowIncorrectDataException() {
+        exception.expect(IncorrectDataException.class);
+        exception.expectMessage("incorrect.data");
         service.add(MEAL);
-
-        verify(repository).save(MEAL_ENTITY);
-        verify(mapper).mapToEntity(MEAL);
     }
 
     @Test

@@ -50,7 +50,7 @@ public class MealController {
         model.addAttribute("page", parsePageNumber(page, 0, totalPages));
         model.addAttribute("meals", mealService.findAllByPage(page));
         model.addAttribute("user", getUserFromSecurityContext(userService));
-        return "meals/meals";
+        return "meal/meals";
     }
 
     @GetMapping(value = "/meals/delete")
@@ -65,7 +65,7 @@ public class MealController {
     @GetMapping(value = "/meals/add")
     public String addMeal(Model model) {
         model.addAttribute("meal", new Meal());
-        return "meals/add";
+        return "meal/add";
     }
 
     @PostMapping(value = "/meals/add")
@@ -86,7 +86,7 @@ public class MealController {
         } else {
             throw new AccessDeniedException("access.denied");
         }
-        return "meals/edit";
+        return "meal/edit";
     }
 
     @PostMapping(value = "/meals/edit")

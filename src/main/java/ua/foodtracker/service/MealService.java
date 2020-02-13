@@ -9,6 +9,8 @@ import java.util.Optional;
 public interface MealService {
     Page<Meal> findAllByPage(String pageNumber);
 
+    Optional<Meal> findById(String id);
+
     int pageCount();
 
     void add(Meal meal);
@@ -16,6 +18,4 @@ public interface MealService {
     void delete(String id, User user);
 
     void modify(Meal meal);
-
-    Optional<Meal> findById(String id);
 }

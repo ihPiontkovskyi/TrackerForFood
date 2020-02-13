@@ -19,18 +19,16 @@ import ua.foodtracker.entity.GenderEntity;
 import ua.foodtracker.entity.LifestyleEntity;
 import ua.foodtracker.entity.RoleEntity;
 import ua.foodtracker.entity.UserEntity;
-import ua.foodtracker.repository.UserRepository;
 import ua.foodtracker.exception.IncorrectDataException;
+import ua.foodtracker.repository.UserRepository;
 import ua.foodtracker.service.impl.UserServiceImpl;
-import ua.foodtracker.service.mapper.impl.UserMapper;
+import ua.foodtracker.service.mapper.Mapper;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -44,7 +42,7 @@ public class UserServiceTest {
     @Mock
     private UserRepository repository;
     @Mock
-    private UserMapper mapper;
+    private Mapper<User, UserEntity> mapper;
     @Mock
     private PasswordEncoder encoder;
 
@@ -99,16 +97,6 @@ public class UserServiceTest {
 
         verify(repository).save(USER_ENTITY);
         verify(mapper).mapToEntity(USER);
-    }
-
-    @Test
-    public void deleteShouldEndSuccessfully() {
-        when(mapper.mapToEntity(USER)).thenReturn(USER_ENTITY);
-
-        service.delete(USER);
-
-        verify(mapper).mapToEntity(USER);
-        verify(repository).delete(USER_ENTITY);
     }
 
     @Test

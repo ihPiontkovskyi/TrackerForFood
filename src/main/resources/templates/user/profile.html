@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Register Your Account</title>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
+    <link rel="icon" type="image/png" th:href="@{/images/logo-002.png}"/>
+    <link th:href="@{/css/register.css}" rel="stylesheet" media="all">
+</head>
+
+<body class="bg-gra-02">
+<div class="page-wrapper p-t-40 font-poppins">
+    <div class="lang-block">
+        <a th:href="@{/profile(lang=en)}">EN</a>
+        <a th:href="@{/profile(lang=ru)}">RU</a>
+    </div>
+    <div class="wrapper wrapper--w680">
+        <div class="card card-4">
+            <div class="card-body">
+                <h2 class="title" th:text="#{registration.label}">
+
+                </h2>
+                <form action="register" method="POST" th:object="${user}">
+                    <div class="row row-space">
+                        <div class="col-2">
+                            <div class="input-group">
+                                <label class="label">
+                                    <input class="input--style-4" th:placeholder="#{first.name.field}" type="text"
+                                           name="first_name" th:field="*{firstName}" th:value="${user.firstName}">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="input-group">
+                                <label class="label">
+                                    <input class="input--style-4" th:placeholder="#{last.name.field}" type="text"
+                                           name="last_name" th:field="*{lastName}"  th:value="${user.lastName}">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-space">
+                        <div class="col-2">
+                            <div class="input-group">
+                                <label class="label">
+                                    <div class="input-group-icon">
+                                        <input class="input--style-4 js-datepicker" th:placeholder="#{birthday.field}"
+                                               type="text" name="birthday"
+                                               th:field="*{birthday}"  th:value="${user.birthday}">
+                                        <em class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></em>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="input-group">
+                                <label class="label">
+                                    <span th:text="#{gender.field}"></span>
+                                    <div class="rs-select2 js-select-simple select--no-search">
+                                        <select name="gender" th:field="*{gender}">
+                                            <option th:value="${T(ua.foodtracker.domain.Gender).OTHER}"
+                                                    th:text="#{other.checkbox}">
+                                            </option>
+                                            <option th:value="${T(ua.foodtracker.domain.Gender).MALE}"
+                                                    th:text="#{male.checkbox}">
+                                            </option>
+                                            <option th:value="${T(ua.foodtracker.domain.Gender).FEMALE}"
+                                                    th:text="#{female.checkbox}">
+                                            </option>
+                                        </select>
+                                        <div class="select-dropdown"></div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-space">
+                        <div class="col-2">
+                            <div class="input-group">
+                                <label class="label">
+                                    <input class="input--style-4" th:placeholder="#{username.field}" type="email"
+                                           name="email" th:field="*{email}"  th:value="${user.email}" disabled>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!--TODO do smth with this field????? -->
+                        <div class="col-2">
+                            <div class="input-group ">
+                                <label class="label">
+                                    <input class="input--style-4" th:placeholder="#{password.field}" type="password"
+                                           name="pass" th:field="*{password}">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-space">
+                        <div class="col-2">
+                            <div class="input-group ">
+                                <label class="label">
+                                    <input class="input--style-4" th:placeholder="#{repeat.password.field}"
+                                           type="password" name="repeat-pass"
+                                           th:field="*{repeatPassword}">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-space">
+                        <div class="col-2">
+                            <div class="input-group">
+                                <label class="label">
+                                    <input class="input--style-4" th:placeholder="#{weight.field}" type="number"
+                                           name="weight" th:field="*{weight}"  th:value="${user.weight}">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="input-group">
+                                <label class="label">
+                                    <input class="input--style-4" th:placeholder="#{height.field}" type="number"
+                                           name="height" th:field="*{height}"  th:value="${user.height}">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <!--TODO set field????? -->
+                    <div class="input-group">
+                        <label class="label">
+                            <span th:text="#{lifestyle.select}"></span>
+                            <div class="rs-select2 js-select-simple select--no-search">
+                                <select name="lifestyle" th:field="*{lifestyle}">
+                                    <option th:value="${T(ua.foodtracker.domain.Lifestyle).NOT_SELECTED}"
+                                            selected="selected"
+                                            th:text="#{choose.option}">
+                                    </option>
+                                    <option th:value="${T(ua.foodtracker.domain.Lifestyle).SEDENTARY}"
+                                            th:text="#{sedentary.option}">
+                                    </option>
+                                    <option th:value="${T(ua.foodtracker.domain.Lifestyle).LIGHTLY_ACTIVE}"
+                                            th:text="#{lightly.active.option}">
+                                    </option>
+                                    <option th:value="${T(ua.foodtracker.domain.Lifestyle).ACTIVE}"
+                                            th:text="#{active.option}">
+                                    </option>
+                                    <option th:value="${T(ua.foodtracker.domain.Lifestyle).VERY_ACTIVE}"
+                                            th:text="#{very.active.option}">
+                                    </option>
+                                </select>
+                                <div class="select-dropdown"></div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="p-t-15">
+                        <button class="btn btn--radius-2 btn--blue" type="submit" th:text="#{submit.btn}">
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script src="https://use.fontawesome.com/59810e450d.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script th:inline="javascript">
+    (function ($) {
+        'use strict';
+        let locale_lang;
+        let currentLang = [[#{lang}]];
+        if ("??lang_ru??" === currentLang) {
+            locale_lang = {
+                format: 'YYYY-MM-DD',
+                "daysOfWeek": [
+                    "Вс",
+                    "Пн",
+                    "Вт",
+                    "Ср",
+                    "Чт",
+                    "Пт",
+                    "Сб"
+                ],
+                "monthNames": [
+                    "Январь",
+                    "Февраль",
+                    "Март",
+                    "Апрель",
+                    "Май",
+                    "Июнь",
+                    "Июль",
+                    "Август",
+                    "Сентябрь",
+                    "Октябрь",
+                    "Ноябрь",
+                    "Декабрь"
+                ],
+            }
+        } else {
+            locale_lang = {
+                format: 'YYYY-MM-DD'
+            }
+        }
+        try {
+            $('.js-datepicker').daterangepicker({
+                "singleDatePicker": true,
+                "showDropdowns": true,
+                "autoUpdateInput": false,
+                locale: locale_lang,
+            });
+            let myCalendar = $('.js-datepicker');
+            let isClick = 0;
+            $(window).on('click', function () {
+                isClick = 0;
+            });
+            $(myCalendar).on('apply.daterangepicker', function (ev, picker) {
+                isClick = 0;
+                $(this).val(picker.startDate.format('YYYY-MM-DD'));
+
+            });
+            $('.js-btn-calendar').on('click', function (e) {
+                e.stopPropagation();
+                if (isClick === 1) isClick = 0;
+                else if (isClick === 0) isClick = 1;
+                if (isClick === 1) {
+                    myCalendar.focus();
+                }
+            });
+            $(myCalendar).on('click', function (e) {
+                e.stopPropagation();
+                isClick = 1;
+            });
+            $('.daterangepicker').on('click', function (e) {
+                e.stopPropagation();
+            });
+        } catch (er) {
+            console.log(er);
+        }
+        try {
+            let selectSimple = $('.js-select-simple');
+            selectSimple.each(function () {
+                let that = $(this);
+                let selectBox = that.find('select');
+                let selectDropdown = that.find('.select-dropdown');
+                selectBox.select2({
+                    dropdownParent: selectDropdown
+                });
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    })(jQuery);
+</script>
+</body>
+
+</html>

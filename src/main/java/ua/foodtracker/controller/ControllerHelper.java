@@ -13,14 +13,11 @@ import java.util.stream.Collectors;
 
 @UtilityClass
 public class ControllerHelper {
-
+    //TODO add tests
     public static User getUserFromSecurityContext(UserService service) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        Optional<User> user = service.findByEmail(username);
-        if (user.isPresent()) {
-            return user.get();
-        }
-        throw new UnauthorizedException("unauthorized.request");
+        return service.findByEmail(username)
+                .orElseThrow(() -> new UnauthorizedException("unauthorized.request"));
     }
 
     public static List<String> getUserAuthorities() {
@@ -34,6 +31,10 @@ public class ControllerHelper {
     }
 
     public static boolean isUserAccessed(Meal meal, User user) {
-        return meal.getUser() != null && meal.getUser().getId().equals(user.getId());
+        return Optional.ofNullable(meal)
+                .map(Meal::getUser)
+                .map(User::getId)
+                .filter(x -> user.getId().equals(x))
+                .isPresent();
     }
 }

@@ -25,10 +25,10 @@ import ua.foodtracker.entity.RecordEntity;
 import ua.foodtracker.entity.RoleEntity;
 import ua.foodtracker.entity.UserEntity;
 import ua.foodtracker.exception.AccessDeniedException;
-import ua.foodtracker.repository.RecordRepository;
 import ua.foodtracker.exception.IncorrectDataException;
+import ua.foodtracker.repository.RecordRepository;
 import ua.foodtracker.service.impl.RecordServiceImpl;
-import ua.foodtracker.service.mapper.impl.RecordMapper;
+import ua.foodtracker.service.mapper.Mapper;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -56,7 +56,7 @@ public class RecordServiceTest {
     @Mock
     private RecordRepository repository;
     @Mock
-    private RecordMapper mapper;
+    private Mapper<Record, RecordEntity> mapper;
 
     @InjectMocks
     private RecordServiceImpl service;
@@ -70,14 +70,10 @@ public class RecordServiceTest {
     }
 
     @Test
-    public void addShouldEndSuccessfully() {
-        when(repository.save(RECORD_ENTITY)).thenReturn(RECORD_ENTITY);
-        when(mapper.mapToEntity(RECORD)).thenReturn(RECORD_ENTITY);
-
+    public void addShouldThrowIncorrectDataException() {
+        exception.expect(IncorrectDataException.class);
+        exception.expectMessage("incorrect.data");
         service.add(RECORD);
-
-        verify(repository).save(RECORD_ENTITY);
-        verify(mapper).mapToEntity(RECORD);
     }
 
     @Test

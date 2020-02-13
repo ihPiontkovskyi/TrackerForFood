@@ -12,18 +12,19 @@ import ua.foodtracker.entity.RecordEntity;
 import ua.foodtracker.exception.AccessDeniedException;
 import ua.foodtracker.exception.IncorrectDataException;
 import ua.foodtracker.repository.RecordRepository;
+import ua.foodtracker.service.DateProvider;
 import ua.foodtracker.service.RecordService;
-import ua.foodtracker.service.mapper.impl.RecordMapper;
+import ua.foodtracker.service.mapper.Mapper;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 import static ua.foodtracker.service.utility.ServiceUtility.findByStringParam;
 
 @Service
@@ -34,30 +35,32 @@ public class RecordServiceImpl implements RecordService {
     private static final int WEEKS_COUNT = 1;
     private static final int PERIOD = 1;
     private static final int DAYS_COUNT = 8;
+    public static final String INCORRECT_DATA = "incorrect.data";
+
     private final RecordRepository recordRepository;
-    private final RecordMapper recordMapper;
+    private final Mapper<Record, RecordEntity> recordMapper;
+    private final DateProvider dateProvider;
 
     @Override
     public List<Record> getRecordsByDate(User user, String date) {
-        if (date == null) {
-            return getRecordsByDate(user, LocalDate.now());
-        }
-        try {
-            return getRecordsByDate(user, LocalDate.parse(date));
-        } catch (DateTimeParseException ex) {
-            return getRecordsByDate(user, LocalDate.now());
-        }
+        return recordRepository.findAllByUserIdAndDate(user.getId(), dateProvider.parseOrCurrentDate(date))
+                .stream()
+                .map(recordMapper::mapToDomain)
+                .collect(Collectors.toList());
     }
 
     @Override
     public void add(Record record) {
+        if (nonNull(record.getId())) {
+            throw new IncorrectDataException(INCORRECT_DATA);
+        }
         recordRepository.save(recordMapper.mapToEntity(record));
     }
 
     @Override
     public void delete(String id, User user) {
         RecordEntity entity = findByStringParam(id, recordRepository::findById)
-                .orElseThrow(() -> new IncorrectDataException("incorrect.data"));
+                .orElseThrow(() -> new IncorrectDataException(INCORRECT_DATA));
         if (entity.getUser().getId().equals(user.getId())) {
             recordRepository.delete(entity);
         } else {
@@ -67,6 +70,9 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public void modify(Record record) {
+        if (isNull(record.getId())) {
+            throw new IncorrectDataException(INCORRECT_DATA);
+        }
         recordRepository.save(recordMapper.mapToEntity(record));
     }
 
@@ -90,8 +96,8 @@ public class RecordServiceImpl implements RecordService {
             fat += meal.getFat();
             carbohydrate += meal.getCarbohydrate();
             water += meal.getWater();
-
         }
+
         return DailySums.builder()
                 .sumCarbohydrates(carbohydrate)
                 .sumEnergy(energy)
@@ -104,9 +110,12 @@ public class RecordServiceImpl implements RecordService {
     @Override
     public HomeModel getHomeModel(User user) {
         DailySums dailySums = calculateDailySums(user, LocalDate.now().toString());
-        List<LocalDate> dateList = getWeek();
-        List<String> labels = dateList.stream().map(DATE_TIME_FORMATTER::format).collect(Collectors.toList());
-        Map<String, DailySums> weeklyStat = getFormatDates(user, dateList);
+        List<LocalDate> dateList = dateProvider.getLastWeek();
+        List<String> labels = dateList.stream()
+                .map(DATE_TIME_FORMATTER::format)
+                .collect(Collectors.toList());
+
+        Map<String, DailySums> weeklyStat = getStatisticsByDates(user, dateList);
 
         return HomeModel.builder()
                 .dailySums(dailySums)
@@ -116,21 +125,8 @@ public class RecordServiceImpl implements RecordService {
                 .build();
     }
 
-    private Map<String, DailySums> getFormatDates(User user, List<LocalDate> dateList) {
-        return dateList.stream()
+    private Map<String, DailySums> getStatisticsByDates(User user, List<LocalDate> dates) {
+        return dates.stream()
                 .collect(Collectors.toMap(DATE_TIME_FORMATTER::format, date -> calculateDailySums(user, date.toString())));
-    }
-
-    private List<LocalDate> getWeek() {
-        return Stream.iterate(LocalDate.now().minusWeeks(WEEKS_COUNT), date -> date.plusDays(PERIOD))
-                .limit(DAYS_COUNT)
-                .sorted()
-                .collect(Collectors.toList());
-    }
-
-    private List<Record> getRecordsByDate(User user, LocalDate parse) {
-        return recordRepository.findAllByUserIdAndDate(user.getId(), parse).stream()
-                .map(recordMapper::mapToDomain)
-                .collect(Collectors.toList());
     }
 }

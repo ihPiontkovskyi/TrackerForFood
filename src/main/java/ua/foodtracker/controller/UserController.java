@@ -2,22 +2,17 @@ package ua.foodtracker.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import ua.foodtracker.domain.User;
 import ua.foodtracker.service.UserService;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-import static java.util.Collections.singletonList;
+import static ua.foodtracker.controller.ControllerHelper.getUserFromSecurityContext;
 
 @Controller
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -42,4 +37,15 @@ public class UserController {
         return "login";
     }
 
+    @GetMapping(value = {"/profile"})
+    public String userProfile(Model model) {
+        model.addAttribute("user", getUserFromSecurityContext(userService));
+        return "user/profile";
+    }
+
+    @PostMapping(value = {"/profile"})
+    public String userProfile(Model model, @ModelAttribute @Valid User user) {
+        userService.modify(user);
+        return "user/profile";
+    }
 }

@@ -1,23 +1,12 @@
 package ua.foodtracker.utility;
 
+import lombok.experimental.UtilityClass;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
+@UtilityClass
 public class ParameterParser {
-
-    private ParameterParser() {
-    }
-
-    public static LocalDate parseOrDefault(String param, LocalDate defaultValue) {
-        if (param == null) {
-            return defaultValue;
-        }
-        try {
-            return LocalDate.parse(param);
-        } catch (DateTimeParseException ex) {
-            return defaultValue;
-        }
-    }
 
     public static int parsePageNumber(String param, int defaultValue, int maxValue) {
         if (param == null) {

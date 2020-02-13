@@ -9,10 +9,12 @@ import ua.foodtracker.entity.UserEntity;
 import ua.foodtracker.exception.IncorrectDataException;
 import ua.foodtracker.repository.UserRepository;
 import ua.foodtracker.service.UserService;
-import ua.foodtracker.service.mapper.impl.UserMapper;
+import ua.foodtracker.service.mapper.Mapper;
 
 import java.util.Optional;
 
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 import static ua.foodtracker.service.utility.ServiceUtility.findByStringParam;
 
 @Service
@@ -20,11 +22,14 @@ import static ua.foodtracker.service.utility.ServiceUtility.findByStringParam;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
+    private final Mapper<User, UserEntity> userMapper;
     private final PasswordEncoder encoder;
 
     @Override
     public void register(User user) {
+        if (isNull(user.getId())) {
+            throw new IncorrectDataException("incorrect.data");
+        }
         if (!user.getPassword().equals(user.getRepeatPassword())) {
             throw new IncorrectDataException("passwords.do.not.match");
         }
@@ -38,22 +43,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void modify(User user) {
+        if (isNull(user.getId())) {
+            throw new IncorrectDataException("incorrect.data");
+        }
         userRepository.save(userMapper.mapToEntity(user));
     }
 
     @Override
     public Optional<User> findById(String id) {
-        return findByStringParam(id, userRepository::findById).map(userMapper::mapToDomain);
-    }
-
-    @Override
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email)
+        return findByStringParam(id, userRepository::findById)
                 .map(userMapper::mapToDomain);
     }
 
     @Override
-    public void delete(User user) {
-        userRepository.delete(userMapper.mapToEntity(user));
+    public Optional<User> findByEmail(String email) {
+        if (isNull(email)) {
+            throw new IncorrectDataException("incorrect.data");
+        }
+        return userRepository.findByEmail(email)
+                .map(userMapper::mapToDomain);
     }
 }

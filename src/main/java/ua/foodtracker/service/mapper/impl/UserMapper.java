@@ -19,6 +19,48 @@ import java.time.Period;
 @Component
 public class UserMapper implements Mapper<User, UserEntity> {
 
+    @Override
+    public User mapToDomain(UserEntity entity) {
+        if (entity == null) {
+            return null;
+        }
+        User user = new User();
+        user.setBirthday(entity.getBirthday());
+        user.setFirstName(entity.getFirstName());
+        user.setEmail(entity.getEmail());
+        user.setGender(Gender.valueOf(entity.getGender().name()));
+        user.setHeight(entity.getHeight());
+        user.setId(entity.getId());
+        user.setLastName(entity.getLastName());
+        user.setLifestyle(Lifestyle.valueOf(entity.getLifestyle().name()));
+        user.setPassword(entity.getPassword());
+        user.setRole(Role.valueOf(entity.getRole().name()));
+        user.setWeight(entity.getWeight());
+        user.setUserGoal(buildUserGoal(entity));
+        return user;
+    }
+
+    @Override
+    public UserEntity mapToEntity(User domain) {
+        if (domain == null) {
+            return null;
+        }
+        UserEntity entity = new UserEntity();
+        entity.setEmail(domain.getEmail());
+        entity.setBirthday(domain.getBirthday());
+        entity.setHeight(domain.getHeight());
+        entity.setFirstName(domain.getFirstName());
+        entity.setLastName(domain.getLastName());
+        entity.setGender(GenderEntity.valueOf(domain.getGender().name()));
+        entity.setLifestyle(LifestyleEntity.valueOf(domain.getLifestyle().name()));
+        entity.setId(domain.getId());
+        entity.setPassword(domain.getPassword());
+        entity.setRole(domain.getRole() == null ? RoleEntity.USER : RoleEntity.valueOf(domain.getRole().name()));
+        entity.setWeight(domain.getWeight());
+        entity.setUserGoal(buildUserGoalEntity(domain));
+        return entity;
+    }
+
     private static UserGoalEntity buildUserGoalEntity(User user) {
         int dailyEnergy;
         int age = Period.between(user.getBirthday(), LocalDate.now()).getYears();
@@ -51,47 +93,5 @@ public class UserMapper implements Mapper<User, UserEntity> {
                 .dailyWaterGoal(entity.getUserGoal().getDailyWaterGoal())
                 .id(entity.getUserGoal().getId())
                 .build();
-    }
-
-    @Override
-    public User mapToDomain(UserEntity entity) {
-        if (entity == null) {
-            return null;
-        }
-        User user = new User();
-        user.setBirthday(entity.getBirthday());
-        user.setFirstName(entity.getFirstName());
-        user.setEmail(entity.getFirstName());
-        user.setGender(Gender.valueOf(entity.getGender().name()));
-        user.setHeight(entity.getHeight());
-        user.setId(entity.getId());
-        user.setLastName(entity.getLastName());
-        user.setLifestyle(Lifestyle.valueOf(entity.getLifestyle().name()));
-        user.setPassword(entity.getPassword());
-        user.setRole(Role.valueOf(entity.getRole().name()));
-        user.setWeight(entity.getWeight());
-        user.setUserGoal(buildUserGoal(entity));
-        return user;
-    }
-
-    @Override
-    public UserEntity mapToEntity(User domain) {
-        if (domain == null) {
-            return null;
-        }
-        UserEntity entity = new UserEntity();
-        entity.setEmail(domain.getEmail());
-        entity.setBirthday(domain.getBirthday());
-        entity.setHeight(domain.getHeight());
-        entity.setFirstName(domain.getFirstName());
-        entity.setLastName(domain.getLastName());
-        entity.setGender(GenderEntity.valueOf(domain.getGender().name()));
-        entity.setLifestyle(LifestyleEntity.valueOf(domain.getLifestyle().name()));
-        entity.setId(domain.getId());
-        entity.setPassword(domain.getPassword());
-        entity.setRole(domain.getRole() == null ? RoleEntity.USER : RoleEntity.valueOf(domain.getRole().name()));
-        entity.setWeight(domain.getWeight());
-        entity.setUserGoal(buildUserGoalEntity(domain));
-        return entity;
     }
 }

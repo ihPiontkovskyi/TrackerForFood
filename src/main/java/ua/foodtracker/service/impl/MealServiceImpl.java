@@ -6,10 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ua.foodtracker.domain.Meal;
-import ua.foodtracker.domain.Role;
 import ua.foodtracker.domain.User;
 import ua.foodtracker.entity.MealEntity;
-import ua.foodtracker.entity.UserEntity;
 import ua.foodtracker.exception.AccessDeniedException;
 import ua.foodtracker.exception.IncorrectDataException;
 import ua.foodtracker.repository.MealRepository;
@@ -22,12 +20,14 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static ua.foodtracker.service.utility.ServiceUtility.findByStringParam;
 import static ua.foodtracker.service.utility.ServiceUtility.getNumberOfPage;
+import static ua.foodtracker.service.utility.ServiceUtility.isAccessed;
 import static ua.foodtracker.utility.ParameterParser.parsePageNumber;
 
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class MealServiceImpl implements MealService {
     private static final int ITEMS_PER_PAGE = 3;
+    public static final String INCORRECT_DATA = "incorrect.data";
 
     private final MealRepository mealRepository;
     private final Mapper<Meal, MealEntity> mealMapper;
@@ -46,13 +46,16 @@ public class MealServiceImpl implements MealService {
 
     @Override
     public void add(Meal meal) {
+        if (nonNull(meal.getId())) {
+            throw new IncorrectDataException(INCORRECT_DATA);
+        }
         mealRepository.save(mealMapper.mapToEntity(meal));
     }
 
     @Override
     public void delete(String id, User user) {
         MealEntity entity = findByStringParam(id, mealRepository::findById)
-                .orElseThrow(() -> new IncorrectDataException("incorrect.data"));
+                .orElseThrow(() -> new IncorrectDataException(INCORRECT_DATA));
         if (isAccessed(user, entity)) {
             mealRepository.delete(entity);
         } else {
@@ -62,18 +65,14 @@ public class MealServiceImpl implements MealService {
 
     @Override
     public void modify(Meal meal) {
+        if (isNull(meal.getId())) {
+            throw new IncorrectDataException(INCORRECT_DATA);
+        }
         mealRepository.save(mealMapper.mapToEntity(meal));
     }
 
     @Override
     public Optional<Meal> findById(String id) {
         return findByStringParam(id, mealRepository::findById).map(mealMapper::mapToDomain);
-    }
-
-    private boolean isAccessed(User userInSession, MealEntity entity) {
-        UserEntity currentUser = entity.getUser();
-
-        return isNull(currentUser) && userInSession.getRole() == Role.ADMIN ||
-                nonNull(currentUser) && currentUser.getId().equals(userInSession.getId());
     }
 }

@@ -25,7 +25,7 @@ public class MealMapper implements Mapper<Meal, MealEntity> {
         meal.setName(entity.getName());
         meal.setProtein(entity.getProtein());
         meal.setWater(entity.getWater());
-        meal.setWeight(entity.getProtein());
+        meal.setWeight(entity.getWeight());
         meal.setUser(userMapper.mapToDomain(entity.getUser()));
         return meal;
     }
@@ -39,7 +39,7 @@ public class MealMapper implements Mapper<Meal, MealEntity> {
         entity.setName(domain.getName());
         entity.setProtein(domain.getProtein());
         entity.setWater(domain.getWater());
-        entity.setWeight(domain.getProtein());
+        entity.setWeight(domain.getWeight());
         entity.setUser(userMapper.mapToEntity(domain.getUser()));
         return entity;
     }
