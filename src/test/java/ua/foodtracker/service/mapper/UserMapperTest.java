@@ -5,11 +5,11 @@ import ua.foodtracker.domain.Gender;
 import ua.foodtracker.domain.Lifestyle;
 import ua.foodtracker.domain.Role;
 import ua.foodtracker.domain.User;
-import ua.foodtracker.entity.GenderEntity;
-import ua.foodtracker.entity.LifestyleEntity;
-import ua.foodtracker.entity.RoleEntity;
-import ua.foodtracker.entity.UserEntity;
-import ua.foodtracker.entity.UserGoalEntity;
+import ua.foodtracker.entit.GenderEntity;
+import ua.foodtracker.entit.LifestyleEntity;
+import ua.foodtracker.entit.RoleEntity;
+import ua.foodtracker.entit.UserEntity;
+import ua.foodtracker.entit.UserGoalEntity;
 import ua.foodtracker.service.mapper.impl.UserMapper;
 
 import java.time.LocalDate;

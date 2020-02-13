@@ -1,4 +1,4 @@
-package ua.foodtracker.entity;
+package ua.foodtracker.entit;
 
 import lombok.Data;
 

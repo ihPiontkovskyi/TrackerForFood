@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.foodtracker.domain.User;
-import ua.foodtracker.entity.UserEntity;
+import ua.foodtracker.entit.UserEntity;
 import ua.foodtracker.exception.IncorrectDataException;
 import ua.foodtracker.repository.UserRepository;
 import ua.foodtracker.service.UserService;
@@ -21,14 +21,15 @@ import static ua.foodtracker.service.utility.ServiceUtility.findByStringParam;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class UserServiceImpl implements UserService {
 
+    public static final String INCORRECT_DATA = "incorrect.data";
     private final UserRepository userRepository;
     private final Mapper<User, UserEntity> userMapper;
     private final PasswordEncoder encoder;
 
     @Override
     public void register(User user) {
-        if (isNull(user.getId())) {
-            throw new IncorrectDataException("incorrect.data");
+        if (nonNull(user.getId())) {
+            throw new IncorrectDataException(INCORRECT_DATA);
         }
         if (!user.getPassword().equals(user.getRepeatPassword())) {
             throw new IncorrectDataException("passwords.do.not.match");
@@ -44,7 +45,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void modify(User user) {
         if (isNull(user.getId())) {
-            throw new IncorrectDataException("incorrect.data");
+            throw new IncorrectDataException(INCORRECT_DATA);
         }
         userRepository.save(userMapper.mapToEntity(user));
     }
@@ -58,7 +59,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> findByEmail(String email) {
         if (isNull(email)) {
-            throw new IncorrectDataException("incorrect.data");
+            throw new IncorrectDataException(INCORRECT_DATA);
         }
         return userRepository.findByEmail(email)
                 .map(userMapper::mapToDomain);

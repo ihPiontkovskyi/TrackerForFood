@@ -6,9 +6,9 @@ import org.springframework.stereotype.Component;
 import ua.foodtracker.domain.Meal;
 import ua.foodtracker.domain.Record;
 import ua.foodtracker.domain.User;
-import ua.foodtracker.entity.MealEntity;
-import ua.foodtracker.entity.RecordEntity;
-import ua.foodtracker.entity.UserEntity;
+import ua.foodtracker.entit.MealEntity;
+import ua.foodtracker.entit.RecordEntity;
+import ua.foodtracker.entit.UserEntity;
 import ua.foodtracker.service.mapper.Mapper;
 
 

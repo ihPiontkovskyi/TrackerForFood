@@ -1,4 +1,4 @@
-package ua.foodtracker.entity;
+package ua.foodtracker.entit;
 
 public enum RoleEntity {
     USER,

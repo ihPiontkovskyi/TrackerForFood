@@ -7,7 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ua.foodtracker.domain.Meal;
 import ua.foodtracker.domain.User;
-import ua.foodtracker.entity.MealEntity;
+import ua.foodtracker.entit.MealEntity;
 import ua.foodtracker.exception.AccessDeniedException;
 import ua.foodtracker.exception.IncorrectDataException;
 import ua.foodtracker.repository.MealRepository;

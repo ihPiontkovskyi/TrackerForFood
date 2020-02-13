@@ -10,19 +10,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foodtracker.domain.User;
+import ua.foodtracker.service.DateProvider;
 import ua.foodtracker.service.RecordService;
 import ua.foodtracker.service.UserService;
 
-import java.time.LocalDate;
-
 import static ua.foodtracker.controller.ControllerHelper.getUserFromSecurityContext;
-import static ua.foodtracker.utility.ParameterParser.parseOrDefault;
 
 @Controller
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class RecordController {
     private final RecordService recordService;
     private final UserService userService;
+    private final DateProvider dateProvider;
 
     @RequestMapping(value = "/home", method = {RequestMethod.GET, RequestMethod.POST})
     public String home(Model model) {
@@ -43,7 +42,7 @@ public class RecordController {
     public String diaryPage(Model model,
                             @RequestParam(value = "date", required = false) String date) {
         User user = getUserFromSecurityContext(userService);
-        model.addAttribute("date", parseOrDefault(date, LocalDate.now()));
+        model.addAttribute("date", dateProvider.parseOrCurrentDate(date));
         model.addAttribute("dailySums", recordService.calculateDailySums(user, date));
         model.addAttribute("records", recordService.getRecordsByDate(user, date));
         return "record/records";

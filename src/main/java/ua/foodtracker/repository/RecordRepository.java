@@ -2,7 +2,7 @@ package ua.foodtracker.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ua.foodtracker.entity.RecordEntity;
+import ua.foodtracker.entit.RecordEntity;
 
 import java.time.LocalDate;
 import java.util.List;

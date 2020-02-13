@@ -3,7 +3,6 @@ package ua.foodtracker.domain;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Pattern;
@@ -11,18 +10,7 @@ import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 
 @Data
-public class User {
-
-    private Integer id;
-
-    @Email(message = "user.incorrect.email.exception.message")
-    private String email;
-
-    @Pattern(regexp = "^[a-zA-Z0-9]{4,32}$", message = "user.password.exception.message")
-    private String password;
-
-    @Pattern(regexp = "^[a-zA-Z0-9]{4,32}$", message = "user.password.exception.message")
-    private String repeatPassword;
+public class UserProfileInfo {
 
     @Pattern(regexp = "^[a-zA-zа-яА-Я]{3,32}$", message = "user.first.name.exception.message")
     private String firstName;
@@ -48,9 +36,4 @@ public class User {
 
     @NotNull(message = "user.gender.null.exception.message")
     private Gender gender;
-
-    private UserGoal userGoal;
-
-    @NotNull(message = "user.role.null.exception.message")
-    private Role role;
 }

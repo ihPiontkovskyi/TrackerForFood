@@ -3,8 +3,8 @@ package ua.foodtracker.service.utility;
 import lombok.experimental.UtilityClass;
 import ua.foodtracker.domain.Role;
 import ua.foodtracker.domain.User;
-import ua.foodtracker.entity.MealEntity;
-import ua.foodtracker.entity.UserEntity;
+import ua.foodtracker.entit.MealEntity;
+import ua.foodtracker.entit.UserEntity;
 import ua.foodtracker.exception.IncorrectDataException;
 
 import java.util.function.IntFunction;

@@ -8,7 +8,7 @@ import ua.foodtracker.domain.HomeModel;
 import ua.foodtracker.domain.Meal;
 import ua.foodtracker.domain.Record;
 import ua.foodtracker.domain.User;
-import ua.foodtracker.entity.RecordEntity;
+import ua.foodtracker.entit.RecordEntity;
 import ua.foodtracker.exception.AccessDeniedException;
 import ua.foodtracker.exception.IncorrectDataException;
 import ua.foodtracker.repository.RecordRepository;

@@ -15,7 +15,7 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 @Configuration
 @AllArgsConstructor(onConstructor = @__(@Autowired))
-public class AppConfiguration implements WebMvcConfigurer {
+public class AppConfiguratio implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

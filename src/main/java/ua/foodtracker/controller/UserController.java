@@ -8,11 +8,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import ua.foodtracker.domain.User;
+import ua.foodtracker.domain.UserProfileInfo;
 import ua.foodtracker.service.UserService;
 
 import javax.validation.Valid;
 
-import static ua.foodtracker.controller.ControllerHelper.getUserFromSecurityContext;
+import static ua.foodtracker.controller.ControllerHelper.getUserProfile;
+import static ua.foodtracker.controller.ControllerHelper.makeChanges;
 
 @Controller
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -39,13 +41,14 @@ public class UserController {
 
     @GetMapping(value = {"/profile"})
     public String userProfile(Model model) {
-        model.addAttribute("user", getUserFromSecurityContext(userService));
+        model.addAttribute("user", getUserProfile(userService));
         return "user/profile";
     }
 
     @PostMapping(value = {"/profile"})
-    public String userProfile(Model model, @ModelAttribute @Valid User user) {
+    public String userProfile(@ModelAttribute @Valid UserProfileInfo userProfile) {
+        User user = makeChanges(userProfile, userService);
         userService.modify(user);
-        return "user/profile";
+        return "redirect:/home";
     }
 }
