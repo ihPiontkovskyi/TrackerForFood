@@ -9,7 +9,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import ua.foodtracker.entit.UserEntity;
+import ua.foodtracker.entity.UserEntity;
 import ua.foodtracker.exception.LoginFailedException;
 import ua.foodtracker.repository.UserRepository;
 

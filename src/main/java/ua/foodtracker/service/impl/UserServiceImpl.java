@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.foodtracker.domain.User;
-import ua.foodtracker.entit.UserEntity;
+import ua.foodtracker.entity.UserEntity;
 import ua.foodtracker.exception.IncorrectDataException;
 import ua.foodtracker.repository.UserRepository;
 import ua.foodtracker.service.UserService;

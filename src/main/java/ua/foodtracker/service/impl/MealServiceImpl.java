@@ -7,7 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ua.foodtracker.domain.Meal;
 import ua.foodtracker.domain.User;
-import ua.foodtracker.entit.MealEntity;
+import ua.foodtracker.entity.MealEntity;
 import ua.foodtracker.exception.AccessDeniedException;
 import ua.foodtracker.exception.IncorrectDataException;
 import ua.foodtracker.repository.MealRepository;
@@ -49,7 +49,8 @@ public class MealServiceImpl implements MealService {
         if (nonNull(meal.getId())) {
             throw new IncorrectDataException(INCORRECT_DATA);
         }
-        mealRepository.save(mealMapper.mapToEntity(meal));
+
+        mealRepository.save(mealMapper.mapToEntity(recountData(meal)));
     }
 
     @Override
@@ -74,5 +75,15 @@ public class MealServiceImpl implements MealService {
     @Override
     public Optional<Meal> findById(String id) {
         return findByStringParam(id, mealRepository::findById).map(mealMapper::mapToDomain);
+    }
+
+    private Meal recountData(Meal meal) {
+        double coefficient = 100.0 / meal.getWeight();
+        meal.setWeight(100);
+        meal.setCarbohydrate((int) (meal.getCarbohydrate() * coefficient));
+        meal.setFat((int) (meal.getFat() * coefficient));
+        meal.setProtein((int) (meal.getProtein() * coefficient));
+        meal.setWater((int) (meal.getWater() * coefficient));
+        return meal;
     }
 }

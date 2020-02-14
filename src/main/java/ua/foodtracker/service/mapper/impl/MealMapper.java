@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ua.foodtracker.domain.Meal;
 import ua.foodtracker.domain.User;
-import ua.foodtracker.entit.MealEntity;
-import ua.foodtracker.entit.UserEntity;
+import ua.foodtracker.entity.MealEntity;
+import ua.foodtracker.entity.UserEntity;
 import ua.foodtracker.service.mapper.Mapper;
 
 @Component

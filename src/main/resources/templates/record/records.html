@@ -1,5 +1,5 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <title>Food Tracker</title>
     <link rel="icon" type="image/png" th:href="@{/images/logo-002.png}"/>
@@ -38,7 +38,7 @@
     <header id="header" class="header">
         <div class="top-left">
             <div class="navbar-header">
-                <a class="navbar-brand" href="home"><img th:src="@{/images/logo-001.png}" alt="Logo"></a>
+                <a class="navbar-brand" href="home"><img th:src="@{/images/logo-001.png}" alt="Logo" src="/images/logo-001.png"></a>
             </div>
         </div>
         <div class="top-right">
@@ -237,12 +237,12 @@
                                             <tr>
                                                 <td hidden th:text="${record.getId()}"></td>
                                                 <td th:text="${record.getMeal().getName()}"></td>
-                                                <td th:text="${record.getMeal().getProtein()}"></td>
-                                                <td th:text="${record.getMeal().getCarbohydrate()}"></td>
-                                                <td th:text="${record.getMeal().getFat()}"></td>
-                                                <td th:text="${record.getMeal().calculateEnergy()}"></td>
-                                                <td th:text="${record.getMeal().getWeight()}"></td>
-                                                <td th:text="${record.getMeal().getWater()}"></td>
+                                                <td th:text="${record.calculateProtein()}"></td>
+                                                <td th:text="${record.calculateCarbohydrate()}"></td>
+                                                <td th:text="${record.calculateFat()}"></td>
+                                                <td th:text="${record.calculateEnergy()}"></td>
+                                                <td th:text="${record.getWeight()}"></td>
+                                                <td th:text="${record.calculateWater()}"></td>
                                                 <td><a th:href="@{/records/delete(id=${record.id},date=${date})}"
                                                        class="btn float-right"><i
                                                         class="fa fa-minus"

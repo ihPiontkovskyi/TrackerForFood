@@ -1,4 +1,4 @@
-package ua.foodtracker.entit;
+package ua.foodtracker.entity;
 
 import lombok.Data;
 
@@ -32,4 +32,7 @@ public class RecordEntity {
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
+
+    @Column(name = "weight", nullable = false)
+    private Integer weight;
 }

@@ -5,10 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.foodtracker.domain.DailySums;
 import ua.foodtracker.domain.HomeModel;
-import ua.foodtracker.domain.Meal;
 import ua.foodtracker.domain.Record;
 import ua.foodtracker.domain.User;
-import ua.foodtracker.entit.RecordEntity;
+import ua.foodtracker.entity.RecordEntity;
 import ua.foodtracker.exception.AccessDeniedException;
 import ua.foodtracker.exception.IncorrectDataException;
 import ua.foodtracker.repository.RecordRepository;
@@ -90,12 +89,11 @@ public class RecordServiceImpl implements RecordService {
         int carbohydrate = 0;
         int water = 0;
         for (Record record : records) {
-            Meal meal = record.getMeal();
-            energy += meal.calculateEnergy();
-            protein += meal.getProtein();
-            fat += meal.getFat();
-            carbohydrate += meal.getCarbohydrate();
-            water += meal.getWater();
+            energy += record.calculateEnergy();
+            protein += record.calculateProtein();
+            fat += record.calculateFat();
+            carbohydrate += record.calculateCarbohydrate();
+            water += record.calculateWater();
         }
 
         return DailySums.builder()

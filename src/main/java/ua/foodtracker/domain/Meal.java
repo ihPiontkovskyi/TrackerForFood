@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
 @Data
@@ -29,7 +30,7 @@ public class Meal {
     @NotNull(message = "meal.fat.null.exception.message")
     private Integer fat;
 
-    @PositiveOrZero(message = "meal.weight.not.positive.exception.message")
+    @Positive(message = "meal.weight.not.positive.exception.message")
     @NotNull(message = "meal.weight.null.exception.message")
     private Integer weight;
 
