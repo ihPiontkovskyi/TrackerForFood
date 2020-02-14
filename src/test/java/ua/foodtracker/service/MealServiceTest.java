@@ -214,7 +214,7 @@ public class MealServiceTest {
     public void findByIdShouldReturnOptionalEmpty() {
         when(repository.findById(MEAL.getId())).thenReturn(Optional.empty());
 
-        Optional<Meal> meal = service.findById(MEAL.getId().toString());
+        Meal meal = service.findById(MEAL.getId().toString());
 
         assertThat(meal, is(Optional.empty()));
         verify(repository).findById(MEAL.getId());
@@ -225,7 +225,7 @@ public class MealServiceTest {
         when(repository.findById(MEAL.getId())).thenReturn(Optional.of(MEAL_ENTITY));
         when(mapper.mapToDomain(MEAL_ENTITY)).thenReturn(MEAL);
 
-        Optional<Meal> meal = service.findById(MEAL.getId().toString());
+        Meal meal = service.findById(MEAL.getId().toString());
 
         assertThat(meal, is(Optional.of(MEAL)));
         verify(repository).findById(MEAL.getId());

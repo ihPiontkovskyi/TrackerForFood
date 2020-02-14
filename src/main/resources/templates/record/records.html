@@ -4,7 +4,9 @@
     <title>Food Tracker</title>
     <link rel="icon" type="image/png" th:href="@{/images/logo-002.png}"/>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link th:href="@{/css/form.css}" rel="stylesheet" media="all">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet"/>
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/pixeden-stroke-7-icon@1.2.3/pe-icon-7-stroke/dist/pe-icon-7-stroke.min.css">
     <link href="https://cdn.jsdelivr.net/npm/chartist@0.11.0/dist/chartist.min.css" rel="stylesheet">
@@ -38,7 +40,8 @@
     <header id="header" class="header">
         <div class="top-left">
             <div class="navbar-header">
-                <a class="navbar-brand" href="home"><img th:src="@{/images/logo-001.png}" alt="Logo" src="/images/logo-001.png"></a>
+                <a class="navbar-brand" href="home"><img th:src="@{/images/logo-001.png}" alt="Logo"
+                                                         src="/images/logo-001.png"></a>
             </div>
         </div>
         <div class="top-right">
@@ -164,6 +167,48 @@
                     </div>
                 </div>
             </div>
+            <div class="add">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <h4 class="box-title">
+                                        <span th:text="#{add.meal.label}"></span>
+                                    </h4>
+                                </div>
+
+                                <form th:action="@{/records/add}" method="POST">
+                                    <div class="row">
+                                        <label>
+                                            <input name="meal_id" id="meal_id" hidden>
+                                            <input name="date" hidden th:value="${date}">
+                                        </label>
+                                        <div class="col-5">
+                                            <label class="label">
+                                                <input class="input--style-4" th:placeholder="#{start.typing}"
+                                                       id="meals_autocomplete">
+                                            </label>
+                                        </div>
+                                        <div class="col-5">
+                                            <label class="label">
+                                                <input class="input--style-4" id="weight"
+                                                       th:placeholder="#{weight.column.label}" name="weight"
+                                                       type="number">
+                                            </label>
+                                        </div>
+                                        <div class="col-2">
+                                            <button type="submit" class="btn float-right"><i class="fa fa-plus"
+                                                                                             aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="orders">
                 <div class="row">
                     <div class="col-xl-12">
@@ -185,9 +230,6 @@
                                                 th:href="@{/records(date=${date.plusDays(1)})}" class="btn"><i
                                                 class="fa fa-arrow-right"
                                                 aria-hidden="true"></i></a>
-                                        <a th:href="@{/records/add}" class="btn float-right"><i class="fa fa-plus"
-                                                                                                aria-hidden="true"></i></a>
-
                                     </div>
                                 </div>
                             </div>
@@ -275,10 +317,25 @@
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-migrate-3.0.0.min.js"></script>
+<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 <script src="https://use.fontawesome.com/59810e450d.js"></script>
-<script type="text/javascript">
+<script>
+    jQuery(document).ready(function ($) {
+        $(function () {
+            $("#meals_autocomplete").autocomplete({
+                source: 'byTerm',
+                minLength: 3,
+                select: function (event, ui) {
+                    $("#meals_autocomplete").val(ui.item.label);
+                    $("#meal_id").val(ui.item.id);
+                    return false;
+                }
+            });
+        });
+    });
 </script>
 </body>
 </html>

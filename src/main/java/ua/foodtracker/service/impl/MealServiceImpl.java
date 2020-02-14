@@ -14,7 +14,8 @@ import ua.foodtracker.repository.MealRepository;
 import ua.foodtracker.service.MealService;
 import ua.foodtracker.service.mapper.Mapper;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -73,8 +74,17 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public Optional<Meal> findById(String id) {
-        return findByStringParam(id, mealRepository::findById).map(mealMapper::mapToDomain);
+    public Meal findById(String id) {
+        return findByStringParam(id, mealRepository::findById)
+                .map(mealMapper::mapToDomain)
+                .orElseThrow(() -> new IncorrectDataException("incorrect.data"));
+    }
+
+    @Override
+    public List<Meal> findAllByNameStartWith(String term) {
+        return mealRepository.findAllByNameIsStartingWith(term).stream()
+                .map(mealMapper::mapToDomain)
+                .collect(Collectors.toList());
     }
 
     private Meal recountData(Meal meal) {

@@ -4,12 +4,14 @@ import org.springframework.data.domain.Page;
 import ua.foodtracker.domain.Meal;
 import ua.foodtracker.domain.User;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface MealService {
     Page<Meal> findAllByPage(String pageNumber);
 
-    Optional<Meal> findById(String id);
+    Meal findById(String id);
+
+    List<Meal> findAllByNameStartWith(String term);
 
     int pageCount();
 

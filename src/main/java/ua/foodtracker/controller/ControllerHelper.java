@@ -3,6 +3,7 @@ package ua.foodtracker.controller;
 import lombok.experimental.UtilityClass;
 import org.springframework.security.core.context.SecurityContextHolder;
 import ua.foodtracker.domain.Meal;
+import ua.foodtracker.domain.MealInfo;
 import ua.foodtracker.domain.User;
 import ua.foodtracker.domain.UserProfileInfo;
 import ua.foodtracker.exception.UnauthorizedException;
@@ -62,5 +63,9 @@ public class ControllerHelper {
         user.setLifestyle(userProfileInfo.getLifestyle());
         user.setWeight(userProfileInfo.getWeight());
         return user;
+    }
+
+    public static MealInfo getMealInfo(Meal meal) {
+        return new MealInfo(meal.getId(), meal.getName());
     }
 }

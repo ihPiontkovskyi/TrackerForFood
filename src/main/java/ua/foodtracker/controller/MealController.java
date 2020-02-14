@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foodtracker.domain.Meal;
+import ua.foodtracker.domain.MealInfo;
 import ua.foodtracker.domain.Role;
 import ua.foodtracker.domain.User;
 import ua.foodtracker.exception.AccessDeniedException;
@@ -77,8 +79,7 @@ public class MealController {
 
     @GetMapping(value = "/meals/edit")
     public String editMeal(Model model, @RequestParam(required = false) String id) {
-        Meal item = mealService.findById(id)
-                .orElseThrow(() -> new IncorrectDataException("incorrect.data"));
+        Meal item = mealService.findById(id);
 
         if (isAdminAccessed(item) ||
                 isUserAccessed(item, getUserFromSecurityContext(userService))) {
@@ -94,5 +95,13 @@ public class MealController {
         meal.setUser(user.getRole() == Role.ADMIN ? null : user);
         mealService.modify(meal);
         return REDIRECT;
+    }
+
+    @GetMapping(value = "/byTerm")
+    @ResponseBody
+    public List<MealInfo> mealsAutocomplete(@RequestParam(value = "term", required = false, defaultValue = "") String term) {
+        return mealService.findAllByNameStartWith(term).stream()
+                .map(ControllerHelper::getMealInfo)
+                .collect(Collectors.toList());
     }
 }
