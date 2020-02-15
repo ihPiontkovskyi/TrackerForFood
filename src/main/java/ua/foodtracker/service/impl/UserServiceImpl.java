@@ -2,17 +2,23 @@ package ua.foodtracker.service.impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.foodtracker.domain.User;
 import ua.foodtracker.entity.UserEntity;
 import ua.foodtracker.exception.IncorrectDataException;
+import ua.foodtracker.exception.LoginFailedException;
 import ua.foodtracker.repository.UserRepository;
 import ua.foodtracker.service.UserService;
 import ua.foodtracker.service.mapper.Mapper;
 
 import java.util.Optional;
 
+import static java.util.Collections.singletonList;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static ua.foodtracker.service.utility.ServiceUtility.findByStringParam;
@@ -63,5 +69,24 @@ public class UserServiceImpl implements UserService {
         }
         return userRepository.findByEmail(email)
                 .map(userMapper::mapToDomain);
+    }
+
+    @Override
+    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        String email = authentication.getName();
+        String password = (String) authentication.getCredentials();
+        UserEntity userEntity = userRepository.findByEmail(email).
+                orElseThrow(() -> new LoginFailedException("user.does.not.exists"));
+
+        if (encoder.matches(password, userEntity.getPassword())) {
+            return new UsernamePasswordAuthenticationToken(userEntity.getEmail(), userEntity.getPassword(), singletonList(new SimpleGrantedAuthority(userEntity.getRole().name())));
+        }
+
+        throw new LoginFailedException("incorrect.email.or.password");
+    }
+
+    @Override
+    public boolean supports(Class<?> authentication) {
+        return true;
     }
 }

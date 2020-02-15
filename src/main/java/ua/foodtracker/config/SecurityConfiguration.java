@@ -8,19 +8,20 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import ua.foodtracker.service.UserService;
 
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private final UserAuthenticationProvider provider;
+    private final UserService provider;
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/", "/static/**", "/login", "/register").permitAll()
-                .antMatchers("/home", "/meals/*","/profile", "/records/*").authenticated()
+                .antMatchers("/home", "/meals/*", "/profile", "/records/*").authenticated()
 
                 .and()
                 .formLogin()
