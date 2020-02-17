@@ -77,7 +77,7 @@ public class MealServiceImpl implements MealService {
     public Meal findById(String id) {
         return findByStringParam(id, mealRepository::findById)
                 .map(mealMapper::mapToDomain)
-                .orElseThrow(() -> new IncorrectDataException("incorrect.data"));
+                .orElseThrow(() -> new IncorrectDataException(INCORRECT_DATA));
     }
 
     @Override

@@ -4,6 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import ua.foodtracker.exception.NotFoundException;
+import ua.foodtracker.exception.ServerError;
 
 @ControllerAdvice
 public class ExceptionResolver {
@@ -18,14 +20,14 @@ public class ExceptionResolver {
         return "error/internal-error";
     }
 
+    @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(Throwable.class)
     public String handleNotFound() {
         return "error/error-page";
     }
 
+    @ExceptionHandler(ServerError.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(Throwable.class)
     public String handleServerError() {
         return "error/internal-error";
     }

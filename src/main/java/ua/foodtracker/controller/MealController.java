@@ -16,7 +16,6 @@ import ua.foodtracker.domain.MealInfo;
 import ua.foodtracker.domain.Role;
 import ua.foodtracker.domain.User;
 import ua.foodtracker.exception.AccessDeniedException;
-import ua.foodtracker.exception.IncorrectDataException;
 import ua.foodtracker.service.MealService;
 import ua.foodtracker.service.UserService;
 
