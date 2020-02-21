@@ -15,7 +15,7 @@ import ua.foodtracker.entity.LifestyleEntity;
 import ua.foodtracker.entity.MealEntity;
 import ua.foodtracker.entity.RoleEntity;
 import ua.foodtracker.entity.UserEntity;
-import ua.foodtracker.service.mapper.impl.MealMapper;
+import ua.foodtracker.service.mapper.impl.MealMapperImpl;
 
 import java.time.LocalDate;
 
@@ -40,10 +40,10 @@ public class MealMapperTest {
     private static final MealEntity MEAL_ENTITY_WITH_ADMIN = getMealEntityWithAdmin();
 
     @Mock
-    private Mapper<User, UserEntity> userMapper;
+    private UserMapper userMapper;
 
     @InjectMocks
-    private MealMapper mapper;
+    private MealMapperImpl mapper;
 
     @Test
     public void testMapToDomain() {
@@ -201,7 +201,7 @@ public class MealMapperTest {
 
     private static MealEntity getMealEntityWithUser() {
         MealEntity entity = new MealEntity();
-        entity.setUser(getUserEntity());
+        entity.setUser(USER_ENTITY);
         entity.setWeight(100);
         entity.setWater(10);
         entity.setId(1);
@@ -214,7 +214,7 @@ public class MealMapperTest {
 
     private static MealEntity getMealEntityWithAdmin() {
         MealEntity entity = new MealEntity();
-        entity.setUser(getAdminEntity());
+        entity.setUser(ADMIN_ENTITY);
         entity.setWeight(100);
         entity.setWater(10);
         entity.setId(1);

@@ -3,31 +3,29 @@ package ua.foodtracker.service.mapper.impl;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ua.foodtracker.domain.Meal;
 import ua.foodtracker.domain.Record;
-import ua.foodtracker.domain.User;
-import ua.foodtracker.entity.MealEntity;
 import ua.foodtracker.entity.RecordEntity;
-import ua.foodtracker.entity.UserEntity;
-import ua.foodtracker.service.mapper.Mapper;
+import ua.foodtracker.service.mapper.MealMapper;
+import ua.foodtracker.service.mapper.RecordMapper;
+import ua.foodtracker.service.mapper.UserMapper;
 
 
 @Component
 @AllArgsConstructor(onConstructor = @__(@Autowired))
-public class RecordMapper implements Mapper<Record, RecordEntity> {
+public class RecordMapperImpl implements RecordMapper {
 
-    private final Mapper<User, UserEntity> userMapper;
-    private final Mapper<Meal, MealEntity> mealMapper;
+    private final UserMapper userMapper;
+    private final MealMapper mealMapper;
 
     @Override
-    public Record mapToDomain(RecordEntity entity) {
-        return Record.builder()
-                .date(entity.getDate())
-                .id(entity.getId())
-                .meal(mealMapper.mapToDomain(entity.getMeal()))
-                .user(userMapper.mapToDomain(entity.getUser()))
-                .weight(entity.getWeight())
-                .build();
+    public Record mapToDomain(RecordEntity domain) {
+        Record record = new Record();
+        record.setDate(domain.getDate());
+        record.setId(domain.getId());
+        record.setWeight(domain.getWeight());
+        record.setMeal(mealMapper.mapToDomain(domain.getMeal()));
+        record.setUser(userMapper.mapToDomain(domain.getUser()));
+        return record;
     }
 
     @Override

@@ -14,6 +14,7 @@ import ua.foodtracker.repository.RecordRepository;
 import ua.foodtracker.service.DateProvider;
 import ua.foodtracker.service.RecordService;
 import ua.foodtracker.service.mapper.Mapper;
+import ua.foodtracker.service.mapper.RecordMapper;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -37,7 +38,7 @@ public class RecordServiceImpl implements RecordService {
     public static final String INCORRECT_DATA = "incorrect.data";
 
     private final RecordRepository recordRepository;
-    private final Mapper<Record, RecordEntity> recordMapper;
+    private final RecordMapper recordMapper;
     private final DateProvider dateProvider;
 
     @Override

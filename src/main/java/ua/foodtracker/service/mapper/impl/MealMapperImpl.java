@@ -5,20 +5,19 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ua.foodtracker.domain.Meal;
-import ua.foodtracker.domain.User;
 import ua.foodtracker.entity.MealEntity;
-import ua.foodtracker.entity.UserEntity;
-import ua.foodtracker.service.mapper.Mapper;
+import ua.foodtracker.service.mapper.MealMapper;
+import ua.foodtracker.service.mapper.UserMapper;
 
 @Component
 @AllArgsConstructor(onConstructor = @__(@Autowired))
-public class MealMapper implements Mapper<Meal, MealEntity> {
+public class MealMapperImpl implements MealMapper {
 
-    private final Mapper<User, UserEntity> userMapper;
+    private final UserMapper userMapper;
 
     @Override
     public Meal mapToDomain(MealEntity entity) {
-            Meal meal = new Meal();
+        Meal meal = new Meal();
         meal.setCarbohydrate(entity.getCarbohydrate());
         meal.setFat(entity.getFat());
         meal.setId(entity.getId());

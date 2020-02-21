@@ -18,7 +18,7 @@ import ua.foodtracker.entity.MealEntity;
 import ua.foodtracker.entity.RecordEntity;
 import ua.foodtracker.entity.RoleEntity;
 import ua.foodtracker.entity.UserEntity;
-import ua.foodtracker.service.mapper.impl.RecordMapper;
+import ua.foodtracker.service.mapper.impl.RecordMapperImpl;
 
 import java.time.LocalDate;
 
@@ -38,12 +38,12 @@ public class RecordMapperTest {
     private static final RecordEntity RECORD_ENTITY = getRecordEntity();
 
     @Mock
-    private Mapper<Meal, MealEntity> mealMapper;
+    private MealMapper mealMapper;
     @Mock
-    private Mapper<User, UserEntity> userMapper;
+    private UserMapper userMapper;
 
     @InjectMocks
-    private RecordMapper mapper;
+    private RecordMapperImpl mapper;
 
     @Test
     public void mapRecordToDomain() {
@@ -140,18 +140,20 @@ public class RecordMapperTest {
     }
 
     private static Record getRecord() {
-        return Record.builder()
-                .date(LocalDate.now().minusWeeks(1))
-                .meal(MEAL)
-                .user(USER)
-                .id(1)
-                .build();
+        Record record = new Record();
+        record.setDate(LocalDate.now().minusWeeks(1));
+        record.setId(1);
+        record.setWeight(100);
+        record.setMeal(MEAL);
+        record.setUser(USER);
+        return record;
     }
 
     private static RecordEntity getRecordEntity() {
         RecordEntity entity = new RecordEntity();
         entity.setId(1);
         entity.setUser(USER_ENTITY);
+        entity.setWeight(100);
         entity.setMeal(MEAL_ENTITY);
         entity.setDate(LocalDate.now().minusWeeks(1));
         return entity;

@@ -13,6 +13,7 @@ import ua.foodtracker.exception.IncorrectDataException;
 import ua.foodtracker.repository.MealRepository;
 import ua.foodtracker.service.MealService;
 import ua.foodtracker.service.mapper.Mapper;
+import ua.foodtracker.service.mapper.MealMapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,7 +32,7 @@ public class MealServiceImpl implements MealService {
     public static final String INCORRECT_DATA = "incorrect.data";
 
     private final MealRepository mealRepository;
-    private final Mapper<Meal, MealEntity> mealMapper;
+    private final MealMapper mealMapper;
 
     @Override
     public Page<Meal> findAllByPage(String pageNumber) {

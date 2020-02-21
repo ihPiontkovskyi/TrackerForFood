@@ -2,8 +2,9 @@ package ua.foodtracker.domain;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 @Builder
 public final class DailySums {
     private final int sumEnergy;

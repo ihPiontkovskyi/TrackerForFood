@@ -1,15 +1,15 @@
 package ua.foodtracker.domain;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 
-@Data
-@Builder
+@Getter
+@Setter
 public class Record {
 
     private Integer id;

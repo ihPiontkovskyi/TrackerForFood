@@ -1,6 +1,7 @@
 package ua.foodtracker.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Email;
@@ -10,7 +11,8 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Setter
 public class User {
 
     private Integer id;

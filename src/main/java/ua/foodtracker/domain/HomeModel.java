@@ -14,10 +14,10 @@ public class HomeModel {
     private static final int PERCENTAGE = 100;
     private static final int MAX_PERCENTAGE = 100;
 
-    private DailySums dailySums;
-    private List<String> labels;
-    private Map<String, DailySums> weeklyStats;
-    private DailyGoal dailyGoal;
+    private final DailySums dailySums;
+    private final List<String> labels;
+    private final Map<String, DailySums> weeklyStats;
+    private final DailyGoal dailyGoal;
 
     public List<Integer> getWeeklyEnergyStat() {
         return getListByFunction(DailySums::getSumEnergy);
@@ -66,10 +66,10 @@ public class HomeModel {
     @Builder
     @Getter
     public static class DailyGoal {
-        private int dailyEnergyGoal;
-        private int dailyProteinGoal;
-        private int dailyFatGoal;
-        private int dailyCarbohydratesGoal;
-        private int dailyWaterGoal;
+        private final int dailyEnergyGoal;
+        private final int dailyProteinGoal;
+        private final int dailyFatGoal;
+        private final int dailyCarbohydratesGoal;
+        private final int dailyWaterGoal;
     }
 }

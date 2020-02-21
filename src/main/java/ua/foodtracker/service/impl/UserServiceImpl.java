@@ -14,7 +14,7 @@ import ua.foodtracker.exception.IncorrectDataException;
 import ua.foodtracker.exception.LoginFailedException;
 import ua.foodtracker.repository.UserRepository;
 import ua.foodtracker.service.UserService;
-import ua.foodtracker.service.mapper.Mapper;
+import ua.foodtracker.service.mapper.UserMapper;
 
 import java.util.Optional;
 
@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
 
     public static final String INCORRECT_DATA = "incorrect.data";
     private final UserRepository userRepository;
-    private final Mapper<User, UserEntity> userMapper;
+    private final UserMapper userMapper;
     private final PasswordEncoder encoder;
 
     @Override

@@ -23,6 +23,7 @@ import ua.foodtracker.exception.IncorrectDataException;
 import ua.foodtracker.repository.UserRepository;
 import ua.foodtracker.service.impl.UserServiceImpl;
 import ua.foodtracker.service.mapper.Mapper;
+import ua.foodtracker.service.mapper.UserMapper;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -37,12 +38,13 @@ public class UserServiceTest {
 
     private static final User USER = getUser();
     private static final User INCORRECT_USER = getIncorrectUser();
+    private static final User SAVED_USER = getSavedUser();
     private static final UserEntity USER_ENTITY = getUserEntity();
 
     @Mock
     private UserRepository repository;
     @Mock
-    private Mapper<User, UserEntity> mapper;
+    private UserMapper mapper;
     @Mock
     private PasswordEncoder encoder;
 
@@ -91,33 +93,33 @@ public class UserServiceTest {
     @Test
     public void modifyShouldEndSuccessfully() {
         when(repository.save(USER_ENTITY)).thenReturn(USER_ENTITY);
-        when(mapper.mapToEntity(USER)).thenReturn(USER_ENTITY);
+        when(mapper.mapToEntity(SAVED_USER)).thenReturn(USER_ENTITY);
 
-        service.modify(USER);
+        service.modify(SAVED_USER);
 
         verify(repository).save(USER_ENTITY);
-        verify(mapper).mapToEntity(USER);
+        verify(mapper).mapToEntity(SAVED_USER);
     }
 
     @Test
     public void findByIdShouldReturnOptionalEmpty() {
-        when(repository.findById(USER.getId())).thenReturn(Optional.empty());
+        when(repository.findById(SAVED_USER.getId())).thenReturn(Optional.empty());
 
-        Optional<User> meal = service.findById(USER.getId().toString());
+        Optional<User> meal = service.findById(SAVED_USER.getId().toString());
 
         assertThat(meal, is(Optional.empty()));
-        verify(repository).findById(USER.getId());
+        verify(repository).findById(SAVED_USER.getId());
     }
 
     @Test
     public void findByIdShouldReturnOptional() {
-        when(repository.findById(USER.getId())).thenReturn(Optional.of(USER_ENTITY));
-        when(mapper.mapToDomain(USER_ENTITY)).thenReturn(USER);
+        when(repository.findById(SAVED_USER.getId())).thenReturn(Optional.of(USER_ENTITY));
+        when(mapper.mapToDomain(USER_ENTITY)).thenReturn(SAVED_USER);
 
-        Optional<User> meal = service.findById(USER.getId().toString());
+        Optional<User> meal = service.findById(SAVED_USER.getId().toString());
 
-        assertThat(meal, is(Optional.of(USER)));
-        verify(repository).findById(USER.getId());
+        assertThat(meal, is(Optional.of(SAVED_USER)));
+        verify(repository).findById(SAVED_USER.getId());
         verify(mapper).mapToDomain(USER_ENTITY);
     }
 
@@ -147,6 +149,23 @@ public class UserServiceTest {
         user.setPassword("hash");
         user.setRepeatPassword("not-hash");
         user.setWeight(80);
+        user.setRole(Role.USER);
+        user.setUserGoal(getUserGoal());
+        return user;
+    }
+
+    private static User getSavedUser() {
+        User user = new User();
+        user.setBirthday(LocalDate.now().minusYears(20));
+        user.setFirstName("first-name");
+        user.setEmail("email");
+        user.setGender(Gender.MALE);
+        user.setHeight(80);
+        user.setLastName("last-name");
+        user.setLifestyle(Lifestyle.SEDENTARY);
+        user.setPassword("hash");
+        user.setRepeatPassword("hash");
+        user.setWeight(80);
         user.setId(1);
         user.setRole(Role.USER);
         user.setUserGoal(getUserGoal());
@@ -165,7 +184,6 @@ public class UserServiceTest {
         user.setPassword("hash");
         user.setRepeatPassword("hash");
         user.setWeight(80);
-        user.setId(1);
         user.setRole(Role.USER);
         user.setUserGoal(getUserGoal());
         return user;

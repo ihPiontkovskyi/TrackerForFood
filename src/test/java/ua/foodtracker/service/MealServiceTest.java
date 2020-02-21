@@ -25,6 +25,7 @@ import ua.foodtracker.exception.IncorrectDataException;
 import ua.foodtracker.repository.MealRepository;
 import ua.foodtracker.service.impl.MealServiceImpl;
 import ua.foodtracker.service.mapper.Mapper;
+import ua.foodtracker.service.mapper.MealMapper;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -55,7 +56,7 @@ public class MealServiceTest {
     @Mock
     private MealRepository repository;
     @Mock
-    private Mapper<Meal, MealEntity> mapper;
+    private MealMapper mapper;
 
     @InjectMocks
     private MealServiceImpl service;
@@ -214,10 +215,8 @@ public class MealServiceTest {
     public void findByIdShouldReturnOptionalEmpty() {
         when(repository.findById(MEAL.getId())).thenReturn(Optional.empty());
 
+        exception.expect(IncorrectDataException.class);
         Meal meal = service.findById(MEAL.getId().toString());
-
-        assertThat(meal, is(Optional.empty()));
-        verify(repository).findById(MEAL.getId());
     }
 
     @Test
@@ -227,7 +226,7 @@ public class MealServiceTest {
 
         Meal meal = service.findById(MEAL.getId().toString());
 
-        assertThat(meal, is(Optional.of(MEAL)));
+        assertThat(meal, is(MEAL));
         verify(repository).findById(MEAL.getId());
         verify(mapper).mapToDomain(MEAL_ENTITY);
     }

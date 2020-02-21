@@ -2,10 +2,11 @@ package ua.foodtracker.domain;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
 import javax.validation.constraints.Positive;
 
-@Data
+@Getter
 @Builder
 public class UserGoal {
 

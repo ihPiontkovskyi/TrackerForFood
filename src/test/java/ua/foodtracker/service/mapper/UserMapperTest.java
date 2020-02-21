@@ -10,7 +10,7 @@ import ua.foodtracker.entity.LifestyleEntity;
 import ua.foodtracker.entity.RoleEntity;
 import ua.foodtracker.entity.UserEntity;
 import ua.foodtracker.entity.UserGoalEntity;
-import ua.foodtracker.service.mapper.impl.UserMapper;
+import ua.foodtracker.service.mapper.impl.UserMapperImpl;
 
 import java.time.LocalDate;
 
@@ -25,7 +25,7 @@ public class UserMapperTest {
     private static final UserEntity USER_ENTITY = getUserEntity();
     private static final UserEntity ADMIN_ENTITY = getAdminEntity();
 
-    private UserMapper mapper = new UserMapper();
+    private UserMapperImpl mapper = new UserMapperImpl();
 
     @Test
     public void testMapUserToDomain() {

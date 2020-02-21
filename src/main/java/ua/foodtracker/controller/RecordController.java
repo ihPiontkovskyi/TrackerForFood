@@ -6,8 +6,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foodtracker.domain.DailySums;
@@ -35,7 +33,7 @@ public class RecordController {
     }
 
     @PostMapping(value = "/home-page")
-    public String home(){
+    public String home() {
         return "redirect:/home";
     }
 
@@ -53,12 +51,11 @@ public class RecordController {
                             @RequestParam("weight") Integer weight,
                             @RequestParam(value = "date", required = false) String date,
                             RedirectAttributes attributes) {
-        Record record = Record.builder()
-                .user(getUserFromSecurityContext(userService))
-                .meal(mealService.findById(id))
-                .date(dateProvider.parseOrCurrentDate(date))
-                .weight(weight)
-                .build();
+        Record record = new Record();
+        record.setUser(getUserFromSecurityContext(userService));
+        record.setMeal(mealService.findById(id));
+        record.setDate(dateProvider.parseOrCurrentDate(date));
+        record.setWeight(weight);
         recordService.add(record);
         attributes.addAttribute("date", date);
         return "redirect:";
