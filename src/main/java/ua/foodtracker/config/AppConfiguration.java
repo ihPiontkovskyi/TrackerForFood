@@ -22,11 +22,6 @@ public class AppConfiguration implements WebMvcConfigurer {
         registry.addInterceptor(localeChangeInterceptor());
     }
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/static/**").addResourceLocations("/static/");
-    }
-
     @Bean
     public LocaleResolver localeResolver() {
         return new SessionLocaleResolver();

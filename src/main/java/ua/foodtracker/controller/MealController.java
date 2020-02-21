@@ -51,7 +51,7 @@ public class MealController {
         model.addAttribute("page", parsePageNumber(page, 0, totalPages));
         model.addAttribute("meals", mealService.findAllByPage(page));
         model.addAttribute("user", getUserFromSecurityContext(userService));
-        return "meal/meals";
+        return "meals";
     }
 
     @GetMapping(value = "/meals/delete")
@@ -66,7 +66,7 @@ public class MealController {
     @GetMapping(value = "/meals/add")
     public String addMeal(Model model) {
         model.addAttribute("meal", new Meal());
-        return "meal/add";
+        return "add-meal";
     }
 
     @PostMapping(value = "/meals/add")
@@ -86,7 +86,7 @@ public class MealController {
         } else {
             throw new AccessDeniedException("access.denied");
         }
-        return "meal/edit";
+        return "edit-meal";
     }
 
     @PostMapping(value = "/meals/edit")
@@ -96,7 +96,7 @@ public class MealController {
         return REDIRECT;
     }
 
-    @GetMapping(value = "/byTerm")
+    @GetMapping(value = {"/by-term", "/records/by-term"})
     @ResponseBody
     public List<MealInfo> mealsAutocomplete(@RequestParam(value = "term", required = false, defaultValue = "") String term) {
         return mealService.findAllByNameStartWith(term).stream()

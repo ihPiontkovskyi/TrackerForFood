@@ -1,18 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <meta charset="UTF-8">
-    <title>Register Your Account</title>
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet"/>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
-    <link rel="icon" type="image/png" th:href="@{/images/logo-002.png}"/>
-    <link th:href="@{/css/register.css}" rel="stylesheet" media="all">
+<head th:replace="fragments/general :: head">
 </head>
 
 <body class="bg-gra-02">
 <div class="page-wrapper p-t-40 font-poppins">
-    <div class="lang-block">
+    <div class="lang-block-register">
         <a th:href="@{/register(lang=en)}">EN</a>
         <a th:href="@{/register(lang=ru)}">RU</a>
     </div>
@@ -24,7 +18,7 @@
                 </h2>
                 <form th:action="@{/register}" method="POST" th:object="${user}">
                     <div class="row row-space">
-                        <div class="col-2">
+                        <div class="col-6">
                             <div class="input-group">
                                 <label class="label">
                                     <input class="input--style-4" th:placeholder="#{first.name.field}" type="text"
@@ -32,7 +26,7 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="col-2">
+                        <div class="col-6">
                             <div class="input-group">
                                 <label class="label">
                                     <input class="input--style-4" th:placeholder="#{last.name.field}" type="text"
@@ -42,7 +36,7 @@
                         </div>
                     </div>
                     <div class="row row-space">
-                        <div class="col-2">
+                        <div class="col-6">
                             <div class="input-group">
                                 <label class="label">
                                     <div class="input-group-icon">
@@ -54,7 +48,7 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="col-2">
+                        <div class="col-6">
                             <div class="input-group">
                                 <label class="label">
                                     <span th:text="#{gender.field}"></span>
@@ -78,7 +72,7 @@
                         </div>
                     </div>
                     <div class="row row-space">
-                        <div class="col-2">
+                        <div class="col-6">
                             <div class="input-group">
                                 <label class="label">
                                     <input class="input--style-4" th:placeholder="#{username.field}" type="email"
@@ -87,7 +81,7 @@
                             </div>
                         </div>
 
-                        <div class="col-2">
+                        <div class="col-6">
                             <div class="input-group ">
                                 <label class="label">
                                     <input class="input--style-4" th:placeholder="#{password.field}" type="password"
@@ -97,7 +91,7 @@
                         </div>
                     </div>
                     <div class="row row-space">
-                        <div class="col-2">
+                        <div class="col-6">
                             <div class="input-group ">
                                 <label class="label">
                                     <input class="input--style-4" th:placeholder="#{repeat.password.field}"
@@ -108,7 +102,7 @@
                         </div>
                     </div>
                     <div class="row row-space">
-                        <div class="col-2">
+                        <div class="col-6">
                             <div class="input-group">
                                 <label class="label">
                                     <input class="input--style-4" th:placeholder="#{weight.field}" type="number"
@@ -116,7 +110,7 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="col-2">
+                        <div class="col-6">
                             <div class="input-group">
                                 <label class="label">
                                     <input class="input--style-4" th:placeholder="#{height.field}" type="number"
@@ -160,14 +154,6 @@
         </div>
     </div>
 </div>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="https://use.fontawesome.com/59810e450d.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script th:inline="javascript">
     (function ($) {
         'use strict';

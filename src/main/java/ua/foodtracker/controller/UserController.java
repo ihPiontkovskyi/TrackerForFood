@@ -42,7 +42,7 @@ public class UserController {
     @GetMapping(value = {"/profile"})
     public String userProfile(Model model) {
         model.addAttribute("user", getUserProfile(userService));
-        return "user/profile";
+        return "profile";
     }
 
     @PostMapping(value = {"/profile"})

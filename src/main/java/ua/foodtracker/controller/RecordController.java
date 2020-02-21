@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import ua.foodtracker.domain.DailySums;
 import ua.foodtracker.domain.Record;
 import ua.foodtracker.domain.User;
 import ua.foodtracker.service.DateProvider;
@@ -27,10 +28,15 @@ public class RecordController {
     private final MealService mealService;
     private final DateProvider dateProvider;
 
-    @RequestMapping(value = "/home", method = {RequestMethod.GET, RequestMethod.POST})
+    @GetMapping(value = "/home")
     public String home(Model model) {
         model.addAttribute("homeModel", recordService.getHomeModel(getUserFromSecurityContext(userService)));
         return "home";
+    }
+
+    @PostMapping(value = "/home-page")
+    public String home(){
+        return "redirect:/home";
     }
 
     @GetMapping(value = "/records/delete")
@@ -63,8 +69,13 @@ public class RecordController {
                             @RequestParam(value = "date", required = false) String date) {
         User user = getUserFromSecurityContext(userService);
         model.addAttribute("date", dateProvider.parseOrCurrentDate(date));
-        model.addAttribute("dailySums", recordService.calculateDailySums(user, date));
+        final DailySums dailySums = recordService.calculateDailySums(user, date);
+        if (dailySums.getSumEnergy() > user.getUserGoal().getDailyEnergyGoal()) {
+            model.addAttribute("exceedingTheGoal", true);
+            model.addAttribute("exceedingValue", dailySums.getSumEnergy() - user.getUserGoal().getDailyEnergyGoal());
+        }
+        model.addAttribute("dailySums", dailySums);
         model.addAttribute("records", recordService.getRecordsByDate(user, date));
-        return "record/records";
+        return "records";
     }
 }
