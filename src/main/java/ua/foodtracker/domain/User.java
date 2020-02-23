@@ -53,6 +53,5 @@ public class User {
 
     private UserGoal userGoal;
 
-    @NotNull(message = "user.role.null.exception.message")
     private Role role;
 }

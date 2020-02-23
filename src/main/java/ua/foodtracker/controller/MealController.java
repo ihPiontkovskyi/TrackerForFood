@@ -9,12 +9,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ua.foodtracker.domain.Meal;
 import ua.foodtracker.domain.MealInfo;
-import ua.foodtracker.domain.Role;
-import ua.foodtracker.domain.User;
 import ua.foodtracker.exception.AccessDeniedException;
 import ua.foodtracker.service.MealService;
 import ua.foodtracker.service.UserService;
@@ -90,8 +87,8 @@ public class MealController {
     }
 
     @PostMapping(value = "/meals/edit")
-    public String editMeal(@ModelAttribute @Valid Meal meal, @SessionAttribute("user") User user) {
-        meal.setUser(user.getRole() == Role.ADMIN ? null : user);
+    public String editMeal(@ModelAttribute @Valid Meal meal) {
+        meal.setUser(getUserAuthorities().contains("ADMIN") ? null : getUserFromSecurityContext(userService));
         mealService.modify(meal);
         return REDIRECT;
     }

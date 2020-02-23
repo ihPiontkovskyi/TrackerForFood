@@ -13,7 +13,6 @@ import ua.foodtracker.exception.IncorrectDataException;
 import ua.foodtracker.repository.RecordRepository;
 import ua.foodtracker.service.DateProvider;
 import ua.foodtracker.service.RecordService;
-import ua.foodtracker.service.mapper.Mapper;
 import ua.foodtracker.service.mapper.RecordMapper;
 
 import java.time.LocalDate;

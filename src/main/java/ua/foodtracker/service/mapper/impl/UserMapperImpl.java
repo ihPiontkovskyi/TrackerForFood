@@ -11,7 +11,6 @@ import ua.foodtracker.entity.LifestyleEntity;
 import ua.foodtracker.entity.RoleEntity;
 import ua.foodtracker.entity.UserEntity;
 import ua.foodtracker.entity.UserGoalEntity;
-import ua.foodtracker.service.mapper.Mapper;
 import ua.foodtracker.service.mapper.UserMapper;
 
 import java.time.LocalDate;

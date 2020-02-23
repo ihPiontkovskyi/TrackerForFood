@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 
 @UtilityClass
 public class ControllerHelper {
-    //TODO add tests
     public static User getUserFromSecurityContext(UserService service) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         return service.findByEmail(username)

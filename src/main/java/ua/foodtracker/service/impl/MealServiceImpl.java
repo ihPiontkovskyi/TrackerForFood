@@ -12,7 +12,6 @@ import ua.foodtracker.exception.AccessDeniedException;
 import ua.foodtracker.exception.IncorrectDataException;
 import ua.foodtracker.repository.MealRepository;
 import ua.foodtracker.service.MealService;
-import ua.foodtracker.service.mapper.Mapper;
 import ua.foodtracker.service.mapper.MealMapper;
 
 import java.util.List;
