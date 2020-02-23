@@ -97,6 +97,7 @@ public class MealController {
     @ResponseBody
     public List<MealInfo> mealsAutocomplete(@RequestParam(value = "term", required = false, defaultValue = "") String term) {
         return mealService.findAllByNameStartWith(term).stream()
+                .limit(10)
                 .map(ControllerHelper::getMealInfo)
                 .collect(Collectors.toList());
     }

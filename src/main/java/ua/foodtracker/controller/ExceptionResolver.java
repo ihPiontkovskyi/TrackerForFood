@@ -18,11 +18,7 @@ public class ExceptionResolver {
         return "error/internal-error";
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handleNotFound() {
-        return "error/error-page";
-    }
-
+    @ExceptionHandler(Throwable.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String handleServerError() {
         return "error/internal-error";
